@@ -1,0 +1,18 @@
+{"time":"2025-02-27T14:15:27.554078+05:30","level":"INFO","msg":"stream: starting","core version":"0.19.7","symlink path":"c:\\Users\\DELL\\Desktop\\Coding\\Python\\DL\\wandb\\run-20250227_141527-nz8dg821\\logs\\debug-core.log"}
+{"time":"2025-02-27T14:15:27.6617635+05:30","level":"INFO","msg":"created new stream","id":"nz8dg821"}
+{"time":"2025-02-27T14:15:27.6617635+05:30","level":"INFO","msg":"stream: started","id":"nz8dg821"}
+{"time":"2025-02-27T14:15:27.6617635+05:30","level":"INFO","msg":"handler: started","stream_id":"nz8dg821"}
+{"time":"2025-02-27T14:15:27.6617635+05:30","level":"INFO","msg":"sender: started","stream_id":"nz8dg821"}
+{"time":"2025-02-27T14:15:27.6617635+05:30","level":"INFO","msg":"writer: Do: started","stream_id":"nz8dg821"}
+{"time":"2025-02-27T14:15:28.0632323+05:30","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-02-27T14:15:28.3126836+05:30","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2025-02-27T14:15:42.1749898+05:30","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2025-02-27T14:15:42.9837003+05:30","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-02-27T14:15:42.9837003+05:30","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-02-27T14:15:44.0000128+05:30","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.3578098,"progress":"690B/690B"},{"desc":"uploading history steps 0-0, summary","runtime_seconds":0.0039325}],"total_operations":2}}
+{"time":"2025-02-27T14:15:44.0905774+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-02-27T14:15:45.6293371+05:30","level":"INFO","msg":"stream: closing","id":"nz8dg821"}
+{"time":"2025-02-27T14:15:45.6293371+05:30","level":"INFO","msg":"handler: closed","stream_id":"nz8dg821"}
+{"time":"2025-02-27T14:15:45.6293371+05:30","level":"INFO","msg":"writer: Close: closed","stream_id":"nz8dg821"}
+{"time":"2025-02-27T14:15:45.6293371+05:30","level":"INFO","msg":"sender: closed","stream_id":"nz8dg821"}
+{"time":"2025-02-27T14:15:45.6293371+05:30","level":"INFO","msg":"stream: closed","id":"nz8dg821"}
