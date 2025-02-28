@@ -1,0 +1,46 @@
+_wandb
+activation
+batch_size
+epochs
+hidden_layers
+hidden_size
+learning_rate
+optimizer
+weight_decay
+weight_init
+Running NadamOptimizer self.learning_rate = 0.0001 self.beta1 = 0.9 self.beta2 = 0.999 self.epsilon = 1e-08
+Epoch  1/10, Iteration    0/3375 --> Train Loss: 2.37415, Val Loss: 2.37198
+Epoch  1/10, Iteration 1000/3375 --> Train Loss: 0.45631, Val Loss: 0.56710
+Epoch  1/10, Iteration 2000/3375 --> Train Loss: 0.35465, Val Loss: 0.49555
+Epoch  1/10, Iteration 3000/3375 --> Train Loss: 0.37700, Val Loss: 0.49269
+Epoch  2/10, Iteration  625/3375 --> Train Loss: 0.52151, Val Loss: 0.43809
+Epoch  2/10, Iteration 1625/3375 --> Train Loss: 0.31216, Val Loss: 0.42598
+Epoch  2/10, Iteration 2625/3375 --> Train Loss: 0.11562, Val Loss: 0.39580
+Epoch  3/10, Iteration  250/3375 --> Train Loss: 0.25034, Val Loss: 0.40010
+Epoch  3/10, Iteration 1250/3375 --> Train Loss: 0.35052, Val Loss: 0.37844
+Epoch  3/10, Iteration 2250/3375 --> Train Loss: 0.58862, Val Loss: 0.37746
+Epoch  3/10, Iteration 3250/3375 --> Train Loss: 0.37289, Val Loss: 0.39915
+Epoch  4/10, Iteration  875/3375 --> Train Loss: 0.31269, Val Loss: 0.38142
+Epoch  4/10, Iteration 1875/3375 --> Train Loss: 0.26574, Val Loss: 0.36387
+Epoch  4/10, Iteration 2875/3375 --> Train Loss: 0.36297, Val Loss: 0.36299
+Epoch  5/10, Iteration  500/3375 --> Train Loss: 0.26830, Val Loss: 0.34381
+Epoch  5/10, Iteration 1500/3375 --> Train Loss: 0.39591, Val Loss: 0.34193
+Epoch  5/10, Iteration 2500/3375 --> Train Loss: 0.51180, Val Loss: 0.33947
+Epoch  6/10, Iteration  125/3375 --> Train Loss: 0.20844, Val Loss: 0.33501
+Epoch  6/10, Iteration 1125/3375 --> Train Loss: 0.19349, Val Loss: 0.33429
+Epoch  6/10, Iteration 2125/3375 --> Train Loss: 0.21586, Val Loss: 0.33536
+Epoch  6/10, Iteration 3125/3375 --> Train Loss: 0.12712, Val Loss: 0.34337
+Epoch  7/10, Iteration  750/3375 --> Train Loss: 0.22449, Val Loss: 0.35800
+Epoch  7/10, Iteration 1750/3375 --> Train Loss: 0.22105, Val Loss: 0.33386
+Epoch  7/10, Iteration 2750/3375 --> Train Loss: 0.52128, Val Loss: 0.32721
+Epoch  8/10, Iteration  375/3375 --> Train Loss: 0.08216, Val Loss: 0.34022
+Epoch  8/10, Iteration 1375/3375 --> Train Loss: 0.67182, Val Loss: 0.31830
+Epoch  8/10, Iteration 2375/3375 --> Train Loss: 0.16291, Val Loss: 0.32549
+Epoch  9/10, Iteration    0/3375 --> Train Loss: 0.48346, Val Loss: 0.31422
+Epoch  9/10, Iteration 1000/3375 --> Train Loss: 0.12843, Val Loss: 0.32348
+Epoch  9/10, Iteration 2000/3375 --> Train Loss: 0.16582, Val Loss: 0.34513
+Epoch  9/10, Iteration 3000/3375 --> Train Loss: 0.13667, Val Loss: 0.30630
+Epoch 10/10, Iteration  625/3375 --> Train Loss: 0.21196, Val Loss: 0.32210
+Epoch 10/10, Iteration 1625/3375 --> Train Loss: 0.08722, Val Loss: 0.33040
+Epoch 10/10, Iteration 2625/3375 --> Train Loss: 0.04868, Val Loss: 0.31373
+Test Accuracy: 0.8777

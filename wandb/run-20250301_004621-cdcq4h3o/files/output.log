@@ -1,0 +1,29 @@
+_wandb
+activation
+batch_size
+epochs
+hidden_layers
+hidden_size
+learning_rate
+optimizer
+weight_decay
+weight_init
+Running NadamOptimizer self.learning_rate = 0.0001 self.beta1 = 0.9 self.beta2 = 0.999 self.epsilon = 1e-08
+Epoch  1/10, Iteration    0/1688 --> Train Loss: 28.18920, Val Loss: 24.18602
+Epoch  1/10, Iteration 1000/1688 --> Train Loss: 2.25878, Val Loss: 2.72036
+Epoch  2/10, Iteration  312/1688 --> Train Loss: 0.95724, Val Loss: 1.82151
+Epoch  2/10, Iteration 1312/1688 --> Train Loss: 1.69654, Val Loss: 1.42468
+Epoch  3/10, Iteration  624/1688 --> Train Loss: 0.60996, Val Loss: 1.17918
+Epoch  3/10, Iteration 1624/1688 --> Train Loss: 0.40519, Val Loss: 1.02494
+Epoch  4/10, Iteration  936/1688 --> Train Loss: 0.73885, Val Loss: 0.92997
+Epoch  5/10, Iteration  248/1688 --> Train Loss: 0.98088, Val Loss: 0.83411
+Epoch  5/10, Iteration 1248/1688 --> Train Loss: 0.92481, Val Loss: 0.76948
+Epoch  6/10, Iteration  560/1688 --> Train Loss: 0.71930, Val Loss: 0.71602
+Epoch  6/10, Iteration 1560/1688 --> Train Loss: 0.53551, Val Loss: 0.70041
+Epoch  7/10, Iteration  872/1688 --> Train Loss: 1.13724, Val Loss: 0.65877
+Epoch  8/10, Iteration  184/1688 --> Train Loss: 0.46179, Val Loss: 0.62817
+Epoch  8/10, Iteration 1184/1688 --> Train Loss: 0.61420, Val Loss: 0.59941
+Epoch  9/10, Iteration  496/1688 --> Train Loss: 0.40951, Val Loss: 0.58138
+Epoch  9/10, Iteration 1496/1688 --> Train Loss: 0.34799, Val Loss: 0.56732
+Epoch 10/10, Iteration  808/1688 --> Train Loss: 0.82697, Val Loss: 0.56702
+Test Accuracy: 0.8269
