@@ -1,0 +1,16 @@
+{"time":"2025-03-01T01:26:05.7410332+05:30","level":"INFO","msg":"stream: starting","core version":"0.19.7","symlink path":"c:\\Users\\DELL\\Desktop\\Coding\\Python\\DL\\wandb\\run-20250301_012605-ls81lm7u\\logs\\debug-core.log"}
+{"time":"2025-03-01T01:26:05.8483079+05:30","level":"INFO","msg":"created new stream","id":"ls81lm7u"}
+{"time":"2025-03-01T01:26:05.8483079+05:30","level":"INFO","msg":"stream: started","id":"ls81lm7u"}
+{"time":"2025-03-01T01:26:05.8483079+05:30","level":"INFO","msg":"writer: Do: started","stream_id":"ls81lm7u"}
+{"time":"2025-03-01T01:26:05.8483079+05:30","level":"INFO","msg":"handler: started","stream_id":"ls81lm7u"}
+{"time":"2025-03-01T01:26:05.8483079+05:30","level":"INFO","msg":"sender: started","stream_id":"ls81lm7u"}
+{"time":"2025-03-01T01:26:06.25763+05:30","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-03-01T01:26:16.0159245+05:30","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-03-01T01:26:16.0164526+05:30","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-03-01T01:26:17.0228284+05:30","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.2529949,"progress":"921B/921B"}],"total_operations":1}}
+{"time":"2025-03-01T01:26:17.1871441+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-03-01T01:26:18.5517683+05:30","level":"INFO","msg":"stream: closing","id":"ls81lm7u"}
+{"time":"2025-03-01T01:26:18.5517683+05:30","level":"INFO","msg":"handler: closed","stream_id":"ls81lm7u"}
+{"time":"2025-03-01T01:26:18.5517683+05:30","level":"INFO","msg":"sender: closed","stream_id":"ls81lm7u"}
+{"time":"2025-03-01T01:26:18.5517683+05:30","level":"INFO","msg":"writer: Close: closed","stream_id":"ls81lm7u"}
+{"time":"2025-03-01T01:26:18.5517683+05:30","level":"INFO","msg":"stream: closed","id":"ls81lm7u"}
