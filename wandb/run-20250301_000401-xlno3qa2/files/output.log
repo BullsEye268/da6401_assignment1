@@ -1,0 +1,17 @@
+_wandb
+activation
+batch_size
+epochs
+hidden_layers
+hidden_size
+learning_rate
+optimizer
+weight_decay
+weight_init
+Running NadamOptimizer self.learning_rate = 0.0001 self.beta1 = 0.9 self.beta2 = 0.999 self.epsilon = 1e-08
+Epoch 1/5, Iteration   0/844 --> Train Loss: 9.00825, Val Loss: 9.93224
+Epoch 2/5, Iteration 156/844 --> Train Loss: 1.28591, Val Loss: 1.06791
+Epoch 3/5, Iteration 312/844 --> Train Loss: 1.07711, Val Loss: 0.82321
+Epoch 4/5, Iteration 468/844 --> Train Loss: 0.84394, Val Loss: 0.71645
+Epoch 5/5, Iteration 624/844 --> Train Loss: 0.57478, Val Loss: 0.64837
+Test Accuracy: 0.7694
