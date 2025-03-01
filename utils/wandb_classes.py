@@ -18,7 +18,7 @@ class WandbCallback:
         self.epoch += 1
 
 class WandbTrainer:
-    def __init__(self, dataset_name='fasion_mnist'):
+    def __init__(self, dataset_name='fashion_mnist'):
         self.callback = WandbCallback()
         self.X_train, self.y_train, self.X_val, self.y_val, self.X_test, self.y_test = load_data(dataset_name=dataset_name)
     

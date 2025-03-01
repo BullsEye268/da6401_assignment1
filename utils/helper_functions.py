@@ -2,58 +2,6 @@ import numpy as np
 import argparse
 
 
-def get_optimizer(name, learning_rate, momentum=0.9, beta = 0.9, beta1 = 0.9, beta2 = 0.999, epsilon = 1e-8):
-    # This should match how your NeuralNetwork class handles optimizers
-    if name == 'sgd':
-        return {'name': 'sgd','learning_rate': learning_rate}
-    elif name == 'momentum':
-        return {'name': 'momentum','learning_rate': learning_rate, 'momentum': momentum}
-    elif name == 'nesterov':
-        return {'name': 'nesterov','learning_rate': learning_rate, 'momentum': momentum}
-    elif name == 'rmsprop':
-        return {'name': 'rmsprop','learning_rate': learning_rate, 'beta': beta, 'epsilon': epsilon}
-    elif name == 'adam':
-        return {'name': 'adam','learning_rate': learning_rate, 'beta1': beta1, 'beta2': beta2, 'epsilon': epsilon}
-    elif name == 'nadam':
-        return {'name': 'nadam','learning_rate': learning_rate, 'beta1': beta1, 'beta2': beta2, 'epsilon': epsilon}
-    else:
-        raise ValueError(f"Optimizer {name} not recognized")
-    
-def create_validation_set(X, Y, val_ratio=0.2, seed=None):
-    if seed is not None:
-        np.random.seed(seed)
-    
-    n_samples = X.shape[0]
-    indices = np.random.permutation(n_samples)
-    split_index = int(n_samples * (1 - val_ratio))
-    train_indices = indices[:split_index]
-    val_indices = indices[split_index:]
-    
-    X_train = X[train_indices]
-    Y_train = Y[train_indices]
-    X_val = X[val_indices]
-    Y_val = Y[val_indices]
-    
-    return X_train, X_val, Y_train, Y_val
-
-def load_data(dataset_name='fashion_mnist'):
-    if dataset_name == 'mnist':
-        from keras.datasets import mnist
-        (X_train, y_train), (X_test, y_test) = mnist.load_data()
-    elif dataset_name == 'fashion_mnist':
-        from keras.datasets import fashion_mnist
-        (X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
-    (X_train, X_val, y_train, y_val) = create_validation_set(X_train, y_train, val_ratio=0.1, seed=42)
-
-    # class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 
-    #             'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
-
-    X_train_flat = X_train.reshape(X_train.shape[0], -1) / 255.0
-    X_val_flat = X_val.reshape(X_val.shape[0], -1) / 255.0
-    X_test_flat = X_test.reshape(X_test.shape[0], -1) / 255.0
-    
-    return X_train_flat, y_train, X_val_flat, y_val, X_test_flat, y_test
-
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Train a neural network and log experiments to Weights & Biases"
@@ -76,12 +24,12 @@ def parse_args():
     )
     parser.add_argument(
         "-e", "--epochs",
-        default=10, type=int,
+        default=15, type=int,
         help="Number of epochs to train neural network."
     )
     parser.add_argument(
         "-b", "--batch_size",
-        default=64, type=int,
+        default=128, type=int,
         help="Batch size used to train neural network."
     )
     parser.add_argument(
@@ -139,7 +87,7 @@ def parse_args():
     )
     parser.add_argument(
         "-nhl", "--num_layers",
-        default=3, type=int,
+        default=5, type=int,
         help="Number of hidden layers used in feedforward neural network."
     )
     parser.add_argument(
@@ -154,3 +102,57 @@ def parse_args():
         help='Activation function. Choices: ["identity", "sigmoid", "tanh", "ReLU"]'
     )
     return parser.parse_args()
+
+def get_optimizer(name, learning_rate, momentum=0.9, beta = 0.9, beta1 = 0.9, beta2 = 0.999, epsilon = 1e-8):
+    # This should match how your NeuralNetwork class handles optimizers
+    if name == 'sgd':
+        return {'name': 'sgd','learning_rate': learning_rate}
+    elif name == 'momentum':
+        return {'name': 'momentum','learning_rate': learning_rate, 'momentum': momentum}
+    elif name == 'nesterov':
+        return {'name': 'nesterov','learning_rate': learning_rate, 'momentum': momentum}
+    elif name == 'rmsprop':
+        return {'name': 'rmsprop','learning_rate': learning_rate, 'beta': beta, 'epsilon': epsilon}
+    elif name == 'adam':
+        return {'name': 'adam','learning_rate': learning_rate, 'beta1': beta1, 'beta2': beta2, 'epsilon': epsilon}
+    elif name == 'nadam':
+        return {'name': 'nadam','learning_rate': learning_rate, 'beta1': beta1, 'beta2': beta2, 'epsilon': epsilon}
+    else:
+        raise ValueError(f"Optimizer {name} not recognized")
+    
+def create_validation_set(X, Y, val_ratio=0.2, seed=None):
+    if seed is not None:
+        np.random.seed(seed)
+    
+    n_samples = X.shape[0]
+    indices = np.random.permutation(n_samples)
+    split_index = int(n_samples * (1 - val_ratio))
+    train_indices = indices[:split_index]
+    val_indices = indices[split_index:]
+    
+    X_train = X[train_indices]
+    Y_train = Y[train_indices]
+    X_val = X[val_indices]
+    Y_val = Y[val_indices]
+    
+    return X_train, X_val, Y_train, Y_val
+
+def load_data(dataset_name='fashion_mnist'):
+    if dataset_name == 'mnist':
+        from keras.datasets import mnist
+        (X_train, y_train), (X_test, y_test) = mnist.load_data()
+    elif dataset_name == 'fashion_mnist':
+        from keras.datasets import fashion_mnist
+        (X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
+    else:
+        raise ValueError(f"Dataset {dataset_name} not recognized")
+    (X_train, X_val, y_train, y_val) = create_validation_set(X_train, y_train, val_ratio=0.1, seed=42)
+
+    # class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 
+    #             'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+
+    X_train_flat = X_train.reshape(X_train.shape[0], -1) / 255.0
+    X_val_flat = X_val.reshape(X_val.shape[0], -1) / 255.0
+    X_test_flat = X_test.reshape(X_test.shape[0], -1) / 255.0
+    
+    return X_train_flat, y_train, X_val_flat, y_val, X_test_flat, y_test
