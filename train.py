@@ -39,7 +39,7 @@ def main():
         batch_size=args.batch_size, 
         num_epochs=args.epochs, 
         loss_type=args.loss,
-        log_every=1000,
+        log_every=900,
         callback=wandb_callback  # Assuming your NeuralNetwork class supports callbacks
     )
     

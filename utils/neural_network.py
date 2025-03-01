@@ -57,6 +57,8 @@ class NeuralNetwork:
             # For numerical stability, subtract max value
             exps = np.exp(A - np.max(A, axis=-1, keepdims=True))
             return exps / np.sum(exps, axis=-1, keepdims=True)
+        elif activation.lower() == 'identity':
+            return A
         else:
             raise ValueError(f"Unsupported activation function: {activation}")
     
@@ -68,6 +70,8 @@ class NeuralNetwork:
             return (Z > 0).astype(float)
         elif activation.lower() == 'tanh':
             return 1 - A**2
+        elif activation.lower() == 'identity':
+            return 1
         elif activation.lower() == 'softmax':
             # This is already handled in backpropagation for softmax+cross entropy
             return 1
