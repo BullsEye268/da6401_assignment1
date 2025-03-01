@@ -1,7 +1,3 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-from keras.datasets import fashion_mnist
 import wandb
 
 from utils.neural_network import NeuralNetwork
@@ -20,19 +16,6 @@ def main():
         entity=args.wandb_entity,
         config=vars(args)
     )
-
-    # Print the configuration (or call your actual training function here)
-    print("Starting training with the following configuration:")
-    for key, value in vars(args).items():
-        print(f"{key}: {value}")
-
-    # === PLACEHOLDER FOR YOUR TRAINING CODE ===
-    # Here you would load your data, build your model, train, and log metrics.
-    # For example:
-    #   train_data, val_data = load_data(args.dataset)
-    #   model = build_model(args)
-    #   train(model, train_data, val_data, args)
-    # ============================================
     
     X_train, y_train, X_val, y_val, X_test, y_test = load_data(dataset_name=args.dataset)
     
@@ -60,6 +43,8 @@ def main():
         callback=wandb_callback  # Assuming your NeuralNetwork class supports callbacks
     )
     
+    wandb.log({'test_accuracy': nn.compute_accuracy(X_test, y_test)})
+    
 
     # Mark the end of the wandb run
     wandb.finish()
@@ -67,25 +52,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-
-
-    
-    # wandb_entity = 'bullseye2608-indian-institute-of-technology-madras'
-    # wandb_project = 'fashion_mnist_hp_search'
-    # dataset = 'fashion_mnist'
-    # epochs = 1
-    # batch_size = 4
-    # loss = 'cross_entropy'
-    # optimizer = 'sgd'
-    # learning_rate = 0.1
-    # momentum = 0.9
-    # beta = 0.9
-    # beta1 = 0.9
-    # beta2 = 0.999
-    # epsilon = 1e-8
-    # weight_decay = 0
-    # weight_init = 'Xavier'
-    # num_layers = 2
-    # hidden_size = 128
-    # activation = 'ReLU'
     
