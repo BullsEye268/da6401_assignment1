@@ -1,7 +1,0 @@
-{"time":"2025-03-01T10:38:47.4460567+05:30","level":"INFO","msg":"stream: starting","core version":"0.19.7","symlink path":"c:\\Users\\DELL\\Desktop\\Coding\\Python\\DL\\wandb\\run-20250301_103847-zf8g6mln\\logs\\debug-core.log"}
-{"time":"2025-03-01T10:38:47.5547958+05:30","level":"INFO","msg":"created new stream","id":"zf8g6mln"}
-{"time":"2025-03-01T10:38:47.5547958+05:30","level":"INFO","msg":"stream: started","id":"zf8g6mln"}
-{"time":"2025-03-01T10:38:47.5547958+05:30","level":"INFO","msg":"handler: started","stream_id":"zf8g6mln"}
-{"time":"2025-03-01T10:38:47.5547958+05:30","level":"INFO","msg":"writer: Do: started","stream_id":"zf8g6mln"}
-{"time":"2025-03-01T10:38:47.5547958+05:30","level":"INFO","msg":"sender: started","stream_id":"zf8g6mln"}
-{"time":"2025-03-01T10:38:47.9637422+05:30","level":"INFO","msg":"Starting system monitor"}
