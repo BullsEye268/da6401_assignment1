@@ -18,14 +18,12 @@ class WandbCallback:
         self.epoch += 1
 
 class WandbTrainer:
-    def __init__(self):
+    def __init__(self, dataset_name='fasion_mnist'):
         self.callback = WandbCallback()
-        self.X_train, self.y_train, self.X_val, self.y_val, self.X_test, self.y_test = load_data()
+        self.X_train, self.y_train, self.X_val, self.y_val, self.X_test, self.y_test = load_data(dataset_name=dataset_name)
     
     def train(self):
-        wandb.init(entity="bullseye2608-indian-institute-of-technology-madras",
-                    project="fashion_mnist_hp_search",
-                    config=config)
+        wandb.init()
         
         config = wandb.config
         
