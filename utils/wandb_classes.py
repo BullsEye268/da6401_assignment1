@@ -23,9 +23,7 @@ class WandbTrainer:
         self.X_train, self.y_train, self.X_val, self.y_val, self.X_test, self.y_test = load_data(dataset_name=dataset_name)
     
     def train(self):
-        with wandb.init(
-            name=run_name
-        ) as run:
+        with wandb.init() as run:
             run_name = f"hl_{wandb.config.hidden_layers}_hs_{wandb.config.hidden_size}_opt_{wandb.config.optimizer}_bs_{wandb.config.batch_size}_act_{wandb.config.activation}"
             print('run name is supposed to be ', run_name, run.name)
             run.name = run_name
