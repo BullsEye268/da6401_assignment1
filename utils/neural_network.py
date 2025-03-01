@@ -13,10 +13,10 @@ class NeuralNetwork:
         self.activation_functions = activation_functions
         self.LOG_EACH = LOG_EACH
         
-        if weight_init == 'random':
+        if weight_init.lower() == 'random':
             self.W = [np.random.uniform(-0.5, 0.5, (self.layer_sizes[i], self.layer_sizes[i - 1])) for i in range(1, len(self.layer_sizes))]
             self.B = [np.zeros(self.layer_sizes[i]).reshape(1,-1) for i in range(1, len(self.layer_sizes))]
-        elif weight_init == 'xavier':
+        elif weight_init.lower() == 'xavier':
             # Xavier/Glorot initialization for weights
             self.W = [np.random.randn(self.layer_sizes[i], self.layer_sizes[i - 1]) * 
                     np.sqrt(2.0 / (self.layer_sizes[i] + self.layer_sizes[i - 1])) 
@@ -39,21 +39,21 @@ class NeuralNetwork:
             'nadam': NadamOptimizer
         }
 
-        if optimizer_dict['name'] not in optimizer_map:
+        if optimizer_dict['name'].lower() not in optimizer_map:
             raise ValueError(f"Unsupported optimizer: {optimizer_dict['name']}")
         
         optimizer_dict.update({'LOG_EACH': self.LOG_EACH})
         
-        self.optimizer = optimizer_map[optimizer_dict['name']](self.W, self.B, **optimizer_dict)
+        self.optimizer = optimizer_map[optimizer_dict['name'].lower()](self.W, self.B, **optimizer_dict)
     
     def activate(self, A, activation):
-        if activation == 'sigmoid':
+        if activation.lower() == 'sigmoid':
             return 1 / (1 + np.exp(-A))
-        elif activation == 'relu':
+        elif activation.lower() == 'relu':
             return np.maximum(0, A)
-        elif activation == 'tanh':
+        elif activation.lower() == 'tanh':
             return np.tanh(A)
-        elif activation == 'softmax':
+        elif activation.lower() == 'softmax':
             # For numerical stability, subtract max value
             exps = np.exp(A - np.max(A, axis=-1, keepdims=True))
             return exps / np.sum(exps, axis=-1, keepdims=True)
@@ -62,13 +62,13 @@ class NeuralNetwork:
     
     def _activate_derivative(self, Z, A, activation):
         """Calculate derivative of activation function"""
-        if activation == 'sigmoid':
+        if activation.lower() == 'sigmoid':
             return A * (1 - A)
-        elif activation == 'relu':
+        elif activation.lower() == 'relu':
             return (Z > 0).astype(float)
-        elif activation == 'tanh':
+        elif activation.lower() == 'tanh':
             return 1 - A**2
-        elif activation == 'softmax':
+        elif activation.lower() == 'softmax':
             # This is already handled in backpropagation for softmax+cross entropy
             return 1
         else:
@@ -89,11 +89,11 @@ class NeuralNetwork:
             y = self.one_hot(y)
         m = y.shape[0]  # Number of examples
         
-        if loss_type == 'cross_entropy':
+        if loss_type.lower() == 'cross_entropy':
             # Add small epsilon to avoid log(0)
             epsilon = 1e-15
             loss = -np.sum(y * np.log(H_final + epsilon)) / m
-        elif loss_type == 'mse':
+        elif loss_type.lower() == 'mse':
             loss = np.sum((H_final - y)**2) / (2 * m)
         else:
             raise ValueError(f"Unsupported loss function: {loss_type}")
@@ -101,10 +101,10 @@ class NeuralNetwork:
         return loss
     
     def _loss_derivative(self, A_final, y, loss_type):
-        if loss_type == 'cross_entropy':
+        if loss_type.lower() == 'cross_entropy':
             epsilon = 1e-15
             return -y / (A_final + epsilon)
-        elif loss_type == 'mse':
+        elif loss_type.lower() == 'mse':
             return A_final - y
         else:
             raise ValueError(f"Unsupported loss function: {loss_type}")
@@ -121,7 +121,7 @@ class NeuralNetwork:
         
         dW, dB = [None] * self.L, [None] * self.L
         
-        if loss_type == 'cross_entropy' and self.activation_functions[-1] == 'softmax':
+        if loss_type.lower() == 'cross_entropy' and self.activation_functions[-1].lower() == 'softmax':
             # Gradient simplifies when using softmax + cross entropy
             dA = H[-1] - self.one_hot(y)
         else:
