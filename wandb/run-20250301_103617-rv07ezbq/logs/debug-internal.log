@@ -1,0 +1,16 @@
+{"time":"2025-03-01T10:36:17.9076983+05:30","level":"INFO","msg":"stream: starting","core version":"0.19.7","symlink path":"c:\\Users\\DELL\\Desktop\\Coding\\Python\\DL\\wandb\\run-20250301_103617-rv07ezbq\\logs\\debug-core.log"}
+{"time":"2025-03-01T10:36:19.4211651+05:30","level":"INFO","msg":"created new stream","id":"rv07ezbq"}
+{"time":"2025-03-01T10:36:19.4211651+05:30","level":"INFO","msg":"stream: started","id":"rv07ezbq"}
+{"time":"2025-03-01T10:36:19.4211651+05:30","level":"INFO","msg":"writer: Do: started","stream_id":"rv07ezbq"}
+{"time":"2025-03-01T10:36:19.4221669+05:30","level":"INFO","msg":"sender: started","stream_id":"rv07ezbq"}
+{"time":"2025-03-01T10:36:19.4211651+05:30","level":"INFO","msg":"handler: started","stream_id":"rv07ezbq"}
+{"time":"2025-03-01T10:36:19.7974527+05:30","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-03-01T10:36:49.4429345+05:30","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-03-01T10:36:49.4434643+05:30","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-03-01T10:36:50.3866702+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-03-01T10:36:50.4508247+05:30","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading history steps 5-10, summary, console lines 0-0","runtime_seconds":0.0641545}],"total_operations":1}}
+{"time":"2025-03-01T10:36:51.7301539+05:30","level":"INFO","msg":"stream: closing","id":"rv07ezbq"}
+{"time":"2025-03-01T10:36:51.7301539+05:30","level":"INFO","msg":"handler: closed","stream_id":"rv07ezbq"}
+{"time":"2025-03-01T10:36:51.7301539+05:30","level":"INFO","msg":"writer: Close: closed","stream_id":"rv07ezbq"}
+{"time":"2025-03-01T10:36:51.7301539+05:30","level":"INFO","msg":"sender: closed","stream_id":"rv07ezbq"}
+{"time":"2025-03-01T10:36:51.7306702+05:30","level":"INFO","msg":"stream: closed","id":"rv07ezbq"}

@@ -1,0 +1,16 @@
+{"time":"2025-03-01T04:23:58.5499356+05:30","level":"INFO","msg":"stream: starting","core version":"0.19.7","symlink path":"c:\\Users\\DELL\\Desktop\\Coding\\Python\\DL\\wandb\\run-20250301_042358-yx7uhqe8\\logs\\debug-core.log"}
+{"time":"2025-03-01T04:23:58.6580411+05:30","level":"INFO","msg":"created new stream","id":"yx7uhqe8"}
+{"time":"2025-03-01T04:23:58.6585483+05:30","level":"INFO","msg":"stream: started","id":"yx7uhqe8"}
+{"time":"2025-03-01T04:23:58.6585483+05:30","level":"INFO","msg":"handler: started","stream_id":"yx7uhqe8"}
+{"time":"2025-03-01T04:23:58.6585908+05:30","level":"INFO","msg":"sender: started","stream_id":"yx7uhqe8"}
+{"time":"2025-03-01T04:23:58.6585908+05:30","level":"INFO","msg":"writer: Do: started","stream_id":"yx7uhqe8"}
+{"time":"2025-03-01T04:23:59.0008443+05:30","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-03-01T04:24:12.1741984+05:30","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-03-01T04:24:12.1747356+05:30","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-03-01T04:24:13.1850814+05:30","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading output.log","runtime_seconds":0.4654095,"progress":"22B/22B"},{"desc":"uploading wandb-summary.json","runtime_seconds":0.4654095,"progress":"180B/180B"},{"desc":"uploading config.yaml","runtime_seconds":0.1512121,"progress":"919B/919B"}],"total_operations":3}}
+{"time":"2025-03-01T04:24:14.0272842+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-03-01T04:24:15.431308+05:30","level":"INFO","msg":"stream: closing","id":"yx7uhqe8"}
+{"time":"2025-03-01T04:24:15.431308+05:30","level":"INFO","msg":"handler: closed","stream_id":"yx7uhqe8"}
+{"time":"2025-03-01T04:24:15.431308+05:30","level":"INFO","msg":"sender: closed","stream_id":"yx7uhqe8"}
+{"time":"2025-03-01T04:24:15.431308+05:30","level":"INFO","msg":"writer: Close: closed","stream_id":"yx7uhqe8"}
+{"time":"2025-03-01T04:24:15.4318606+05:30","level":"INFO","msg":"stream: closed","id":"yx7uhqe8"}

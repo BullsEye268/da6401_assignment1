@@ -1,0 +1,16 @@
+{"time":"2025-03-01T04:43:11.7834322+05:30","level":"INFO","msg":"stream: starting","core version":"0.19.7","symlink path":"c:\\Users\\DELL\\Desktop\\Coding\\Python\\DL\\wandb\\run-20250301_044311-j1t4ew7i\\logs\\debug-core.log"}
+{"time":"2025-03-01T04:43:11.892176+05:30","level":"INFO","msg":"created new stream","id":"j1t4ew7i"}
+{"time":"2025-03-01T04:43:11.8932553+05:30","level":"INFO","msg":"handler: started","stream_id":"j1t4ew7i"}
+{"time":"2025-03-01T04:43:11.8933067+05:30","level":"INFO","msg":"stream: started","id":"j1t4ew7i"}
+{"time":"2025-03-01T04:43:11.8933067+05:30","level":"INFO","msg":"writer: Do: started","stream_id":"j1t4ew7i"}
+{"time":"2025-03-01T04:43:11.8933067+05:30","level":"INFO","msg":"sender: started","stream_id":"j1t4ew7i"}
+{"time":"2025-03-01T04:43:12.2894152+05:30","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-03-01T04:43:35.8309469+05:30","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-03-01T04:43:35.8314886+05:30","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-03-01T04:43:36.8386708+05:30","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading output.log","runtime_seconds":0.6910972,"progress":"22B/22B"},{"desc":"uploading config.yaml","runtime_seconds":0.4259057,"progress":"917B/917B"}],"total_operations":2}}
+{"time":"2025-03-01T04:43:37.4323552+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-03-01T04:43:38.7885679+05:30","level":"INFO","msg":"stream: closing","id":"j1t4ew7i"}
+{"time":"2025-03-01T04:43:38.7885679+05:30","level":"INFO","msg":"handler: closed","stream_id":"j1t4ew7i"}
+{"time":"2025-03-01T04:43:38.7885679+05:30","level":"INFO","msg":"writer: Close: closed","stream_id":"j1t4ew7i"}
+{"time":"2025-03-01T04:43:38.7885679+05:30","level":"INFO","msg":"sender: closed","stream_id":"j1t4ew7i"}
+{"time":"2025-03-01T04:43:38.7885679+05:30","level":"INFO","msg":"stream: closed","id":"j1t4ew7i"}
