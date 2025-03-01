@@ -2,20 +2,20 @@ import numpy as np
 import argparse
 
 
-def get_optimizer(name, learning_rate):
+def get_optimizer(name, learning_rate, momentum=0.9, beta = 0.9, beta1 = 0.9, beta2 = 0.999, epsilon = 1e-8):
     # This should match how your NeuralNetwork class handles optimizers
     if name == 'sgd':
         return {'name': 'sgd','learning_rate': learning_rate}
     elif name == 'momentum':
-        return {'name': 'momentum','learning_rate': learning_rate, 'momentum': 0.9}
+        return {'name': 'momentum','learning_rate': learning_rate, 'momentum': momentum}
     elif name == 'nesterov':
-        return {'name': 'nesterov','learning_rate': learning_rate, 'momentum': 0.9}
+        return {'name': 'nesterov','learning_rate': learning_rate, 'momentum': momentum}
     elif name == 'rmsprop':
-        return {'name': 'rmsprop','learning_rate': learning_rate, 'beta': 0.9, 'epsilon': 1e-8}
+        return {'name': 'rmsprop','learning_rate': learning_rate, 'beta': beta, 'epsilon': epsilon}
     elif name == 'adam':
-        return {'name': 'adam','learning_rate': learning_rate, 'beta1': 0.9, 'beta2': 0.999, 'epsilon': 1e-8}
+        return {'name': 'adam','learning_rate': learning_rate, 'beta1': beta1, 'beta2': beta2, 'epsilon': epsilon}
     elif name == 'nadam':
-        return {'name': 'nadam','learning_rate': learning_rate, 'beta1': 0.9, 'beta2': 0.999, 'epsilon': 1e-8}
+        return {'name': 'nadam','learning_rate': learning_rate, 'beta1': beta1, 'beta2': beta2, 'epsilon': epsilon}
     else:
         raise ValueError(f"Optimizer {name} not recognized")
     
@@ -76,12 +76,12 @@ def parse_args():
     )
     parser.add_argument(
         "-e", "--epochs",
-        default=1, type=int,
+        default=10, type=int,
         help="Number of epochs to train neural network."
     )
     parser.add_argument(
         "-b", "--batch_size",
-        default=4, type=int,
+        default=64, type=int,
         help="Batch size used to train neural network."
     )
     parser.add_argument(
@@ -92,38 +92,38 @@ def parse_args():
     )
     parser.add_argument(
         "-o", "--optimizer",
-        default="sgd",
+        default="nadam",
         choices=["sgd", "momentum", "nag", "rmsprop", "adam", "nadam"],
         help='Optimizer to use. Choices: ["sgd", "momentum", "nag", "rmsprop", "adam", "nadam"]'
     )
     parser.add_argument(
         "-lr", "--learning_rate",
-        default=0.1, type=float,
+        default=0.001, type=float,
         help="Learning rate used to optimize model parameters."
     )
     parser.add_argument(
         "-m", "--momentum",
-        default=0.5, type=float,
+        default=0.9, type=float,
         help="Momentum used by momentum and nag optimizers."
     )
     parser.add_argument(
         "-beta", "--beta",
-        default=0.5, type=float,
+        default=0.9, type=float,
         help="Beta used by rmsprop optimizer."
     )
     parser.add_argument(
         "-beta1", "--beta1",
-        default=0.5, type=float,
+        default=0.9, type=float,
         help="Beta1 used by adam and nadam optimizers."
     )
     parser.add_argument(
         "-beta2", "--beta2",
-        default=0.5, type=float,
+        default=0.999, type=float,
         help="Beta2 used by adam and nadam optimizers."
     )
     parser.add_argument(
         "-eps", "--epsilon",
-        default=0.000001, type=float,
+        default=1e-8, type=float,
         help="Epsilon used by optimizers."
     )
     parser.add_argument(
@@ -133,23 +133,23 @@ def parse_args():
     )
     parser.add_argument(
         "-w_i", "--weight_init",
-        default="random",
+        default="Xavier",
         choices=["random", "Xavier"],
         help='Weight initialization method. Choices: ["random", "Xavier"]'
     )
     parser.add_argument(
         "-nhl", "--num_layers",
-        default=1, type=int,
+        default=3, type=int,
         help="Number of hidden layers used in feedforward neural network."
     )
     parser.add_argument(
         "-sz", "--hidden_size",
-        default=4, type=int,
+        default=128, type=int,
         help="Number of hidden neurons in a feedforward layer."
     )
     parser.add_argument(
         "-a", "--activation",
-        default="sigmoid",
+        default="ReLU",
         choices=["identity", "sigmoid", "tanh", "ReLU"],
         help='Activation function. Choices: ["identity", "sigmoid", "tanh", "ReLU"]'
     )
