@@ -24,8 +24,8 @@ class WandbTrainer:
     
     def train(self):
         with wandb.init() as run:
-            run_name = f"hl_{wandb.config.hidden_layers}_hs_{wandb.config.hidden_size}_opt_{wandb.config.optimizer}_bs_{wandb.config.batch_size}_act_{wandb.config.activation}"
-            print('run name is supposed to be ', run_name, run.name)
+            run_name = f"hl:{wandb.config.hidden_layers}_hs:{wandb.config.hidden_size}_bs:{wandb.config.batch_size}_act:{wandb.config.activation}"
+            # print('run name is supposed to be ', run_name, run.name)
             run.name = run_name
             # project='PH21B004_DA6401-Assignment-1',
             config = wandb.config
@@ -58,6 +58,5 @@ class WandbTrainer:
             
             test_accuracy = nn.compute_accuracy(self.X_test, self.y_test)
             wandb.log({"test_accuracy": test_accuracy})
-            print(f"Test Accuracy: {test_accuracy:.4f}")
         
         return
