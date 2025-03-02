@@ -1,6 +1,46 @@
 import numpy as np
 import argparse
 
+class OptimalConfig:
+    def __init__(self, epochs=10, batch_size=64, loss="cross_entropy", optimizer="adam",
+                 learning_rate=0.001, momentum=0.9, beta=0.9, beta1=0.9, beta2=0.999, epsilon=1e-8,
+                 weight_decay=0, weight_init="xavier", num_layers=3, hidden_size=128, activation="relu"):
+        self.epochs = epochs
+        self.batch_size = batch_size
+        self.loss = loss
+        self.optimizer = optimizer
+        self.learning_rate = learning_rate
+        self.momentum = momentum
+        self.beta = beta
+        self.beta1 = beta1
+        self.beta2 = beta2
+        self.epsilon = epsilon
+        self.weight_decay = weight_decay
+        self.weight_init = weight_init
+        self.num_layers = num_layers
+        self.hidden_size = hidden_size
+        self.activation = activation
+    
+    def print_config(self):
+        print(f"epochs: {self.epochs}")
+        print(f"batch_size: {self.batch_size}")
+        print(f"loss: {self.loss}")
+        print(f"optimizer: {self.optimizer}")
+        print(f"learning_rate: {self.learning_rate}")
+        print(f"momentum: {self.momentum}")
+        print(f"beta: {self.beta}")
+        print(f"beta1: {self.beta1}")
+        print(f"beta2: {self.beta2}")
+        print(f"epsilon: {self.epsilon}")
+        print(f"weight_decay: {self.weight_decay}")
+        print(f"weight_init: {self.weight_init}")
+        print(f"num_layers: {self.num_layers}")
+        print(f"hidden_size: {self.hidden_size}")
+        print(f"activation: {self.activation}")
+        
+        
+        
+        
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -24,12 +64,12 @@ def parse_args():
     )
     parser.add_argument(
         "-e", "--epochs",
-        default=15, type=int,
+        default=10, type=int,
         help="Number of epochs to train neural network."
     )
     parser.add_argument(
         "-b", "--batch_size",
-        default=128, type=int,
+        default=64, type=int,
         help="Batch size used to train neural network."
     )
     parser.add_argument(
@@ -40,7 +80,7 @@ def parse_args():
     )
     parser.add_argument(
         "-o", "--optimizer",
-        default="nadam",
+        default="adam",
         choices=["sgd", "momentum", "nag", "rmsprop", "adam", "nadam"],
         help='Optimizer to use. Choices: ["sgd", "momentum", "nag", "rmsprop", "adam", "nadam"]'
     )
@@ -87,7 +127,7 @@ def parse_args():
     )
     parser.add_argument(
         "-nhl", "--num_layers",
-        default=5, type=int,
+        default=3, type=int,
         help="Number of hidden layers used in feedforward neural network."
     )
     parser.add_argument(

@@ -10,7 +10,6 @@ import wandb
 def main():
     args = parse_args()
 
-    # Initialize Weights & Biases with the project, entity, and configuration
     wandb.init(
         project=args.wandb_project,
         entity=args.wandb_entity,
@@ -40,13 +39,11 @@ def main():
         num_epochs=args.epochs, 
         loss_type=args.loss,
         log_every=900,
-        callback=wandb_callback  # Assuming your NeuralNetwork class supports callbacks
+        callback=wandb_callback 
     )
     
     wandb.log({'test_accuracy': nn.compute_accuracy(X_test, y_test)})
     
-
-    # Mark the end of the wandb run
     wandb.finish()
 
 if __name__ == '__main__':

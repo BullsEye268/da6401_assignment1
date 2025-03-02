@@ -217,3 +217,9 @@ class NadamOptimizer(Optimizer):
             B[i] -= self.learning_rate * m_B_nesterov / (np.sqrt(v_B_corrected) + self.epsilon)
         
         return W, B
+    
+
+# A new optimizer can be added by following these steps:
+# 1. Create a new class that inherits from the Optimizer class
+# 2. Implement the update method to update the parameters
+# 3. Add the new optimizer to the optimizer_map dictionary in `utils.neural_network.set_optimiser`
