@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+
 from .optimizer import SGDOptimizer, MomentumOptimizer, NesterovOptimizer, RMSpropOptimizer, AdamOptimizer, NadamOptimizer
+from .helper_functions import get_optimizer
 
 
 class NeuralNetwork:
@@ -97,26 +99,26 @@ class NeuralNetwork:
             # Add small epsilon to avoid log(0)
             epsilon = 1e-15
             loss = -np.sum(y * np.log(H_final + epsilon)) / m
-        elif loss_type.lower() == 'mse':
+        elif loss_type.lower() == 'mse' or loss_type.lower() == 'mean_squared_error':
             loss = np.sum((H_final - y)**2) / (2 * m)
         else:
             raise ValueError(f"Unsupported loss function: {loss_type}")
             
         return loss
     
-    def _loss_derivative(self, A_final, y, loss_type):
+    def _loss_derivative(self, H_final, y, loss_type):
         if loss_type.lower() == 'cross_entropy':
             epsilon = 1e-15
-            return -y / (A_final + epsilon)
-        elif loss_type.lower() == 'mse':
-            return A_final - y
+            return -y / (H_final + epsilon)
+        elif loss_type.lower() == 'mse' or loss_type.lower() == 'mean_squared_error':
+            # The derivative of MSE is (prediction - target)
+            # No need to reshape if y is already in the right shape
+            if y.ndim == 1:
+                y = self.one_hot(y)
+            m = y.shape[0]  # Number of examples
+            return (H_final - y) / m  # Divide by m for proper scaling
         else:
             raise ValueError(f"Unsupported loss function: {loss_type}")
-    
-    def one_hot(self, y):
-        one_hot_y = np.zeros((y.size, self.layer_sizes[-1]))
-        one_hot_y[np.arange(y.size), y] = 1
-        return one_hot_y
     
     def back_propagation(self, X, y, H, A, loss_type='cross_entropy'):
         assert len(H) == self.L + 1 and len(A) == self.L
@@ -149,6 +151,11 @@ class NeuralNetwork:
                 dW[i] += self.weight_decay * self.W[i]
                
         return dW, dB
+    
+    def one_hot(self, y):
+        one_hot_y = np.zeros((y.size, self.layer_sizes[-1]))
+        one_hot_y[np.arange(y.size), y] = 1
+        return one_hot_y
     
     def plot_history(self, history):
         plt.figure(figsize=(12, 6))
@@ -183,7 +190,9 @@ class NeuralNetwork:
         
         history = {
             'train_loss' : [],
-            'val_loss' : [] if X_val is not None else None
+            'train_acc' : [],
+            'val_loss' : [] if X_val is not None else None,
+            'val_acc' : [] if X_val is not None else None
         }
         
         iteration = 0
@@ -206,17 +215,22 @@ class NeuralNetwork:
                 self.W, self.B = self.optimizer.update(self.W, self.B, dW, dB, iteration)
                 
                 if iteration % log_every == 0:
-                    train_loss = self.compute_loss(H[-1], y_batch, loss_type)
-                    history['train_loss'].append(train_loss)
                     
                     if X_val is not None and y_val is not None:
-                        val_loss = self.compute_loss(self.predict(X_val), y_val, loss_type)
-                        history['val_loss'].append(val_loss)
                         if self.LOG_EACH:    print(f"Epoch {epoch+1 :>{spacer_1}}/{num_epochs}, Iteration {iteration%num_batches :>{spacer_2}}/{num_batches} --> Train Loss: {train_loss:.5f}, Val Loss: {val_loss:.5f}")
                     else:
                         if self.LOG_EACH:    print(f"Epoch {epoch+1 :>{spacer_1}}/{num_epochs}, Iteration {iteration%num_batches :>{spacer_2}}/{num_batches} --> Train Loss: {train_loss:.5f}")
                 
                 iteration += 1
+            
+            train_loss = self.compute_loss(H[-1], y_batch, loss_type)
+            train_acc = self.compute_accuracy(X_batch, y_batch)
+            history['train_loss'].append(train_loss)
+            history['train_acc'].append(train_acc)
+            val_loss = self.compute_loss(self.predict(X_val), y_val, loss_type)
+            val_acc = self.compute_accuracy(X_val, y_val)
+            history['val_loss'].append(val_loss)
+            history['val_acc'].append(val_acc)
             
             if callback is not None:
                 callback.on_epoch_end(train_loss, self.compute_accuracy(X_train, y_train), 
@@ -225,3 +239,31 @@ class NeuralNetwork:
                 
         return history
     
+    
+    
+
+def nn_from_config(config, wandb_callback, X_train, y_train, X_val, y_val):
+    layer_sizes = [784] + [config.hidden_size]*config.num_layers + [10]
+    activation_functions = [config.activation]*config.num_layers + ['softmax']
+    
+    nn = NeuralNetwork(layer_sizes=layer_sizes, 
+                    activation_functions=activation_functions,
+                    weight_init=config.weight_init, 
+                    weight_decay=config.weight_decay)
+    
+    optimizer = get_optimizer(config.optimizer, config.learning_rate)
+    nn.set_optimizer(optimizer)
+    
+    history = nn.train(
+        X_train,
+        y_train,
+        X_val,
+        y_val,
+        batch_size=config.batch_size,
+        num_epochs=config.epochs,
+        loss_type=config.loss,
+        log_every=1000,
+        callback=wandb_callback
+    )
+    
+    return nn, history
