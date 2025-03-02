@@ -13,6 +13,7 @@ def main():
     wandb.init(
         project=args.wandb_project,
         entity=args.wandb_entity,
+        tags=['individual_runs'],
         config=vars(args)
     )
     
