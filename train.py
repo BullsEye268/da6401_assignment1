@@ -1,10 +1,7 @@
 import wandb
 import argparse
 
-from utils import neural_network
-from utils import wandb_helper
-from utils import helper_functions
-import wandb
+from utils import neural_network, wandb_helper, helper_functions
 
 
 def parse_args():

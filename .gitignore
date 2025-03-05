@@ -3,4 +3,5 @@ ref.md
 utils/__pycache__
 progress.xlsx
 confusion_matrices/
+plots/
 ~$progress.xlsx
