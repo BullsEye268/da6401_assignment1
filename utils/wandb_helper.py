@@ -1,4 +1,6 @@
 import wandb
+import numpy as np
+import datetime
 
 from .neural_network import NeuralNetwork
 from .helper_functions import load_data, get_optimizer
@@ -60,3 +62,24 @@ class WandbTrainer:
             wandb.log({"test_accuracy": test_accuracy})
         
         return
+
+def log_images(X, y):
+    # Initialize a W&B run
+    wandb.init(
+        entity="bullseye2608-indian-institute-of-technology-madras",
+        project="my-awesome-project", 
+        name="Images_"+datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    )
+    
+    class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
+                   'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+
+    # Log images to W&B
+    wandb.log({
+        "fashion_mnist_samples": [
+            wandb.Image(X[np.where(y == i)[0][0]].reshape(28,28), caption=class_names[i])
+            for i in range(10)
+        ]
+    })
+
+    wandb.finish()

@@ -75,7 +75,6 @@ class NeuralNetwork:
         elif activation.lower() == 'identity':
             return 1
         elif activation.lower() == 'softmax':
-            # This is already handled in backpropagation for softmax+cross entropy
             return 1
         else:
             raise ValueError(f"Unsupported activation function: {activation}")
@@ -171,6 +170,11 @@ class NeuralNetwork:
         H, _ = self.forward_propagation(X)
         return H[-1]
     
+    def compute_accuracy_from_predictions(self, y_pred, y):
+        if y_pred.ndim != 1:
+            y_pred = np.argmax(y_pred, axis=1)
+        return np.mean(y_pred == y)
+    
     def compute_accuracy(self, X, y):
         y_pred = np.argmax(self.predict(X), axis=1)
         return np.mean(y_pred == y)
@@ -216,7 +220,9 @@ class NeuralNetwork:
                 
                 if iteration % log_every == 0:
                     
+                    train_loss = self.compute_loss(H[-1], y_batch, loss_type)
                     if X_val is not None and y_val is not None:
+                        val_loss = self.compute_loss(self.predict(X_val), y_val, loss_type)
                         if self.LOG_EACH:    print(f"Epoch {epoch+1 :>{spacer_1}}/{num_epochs}, Iteration {iteration%num_batches :>{spacer_2}}/{num_batches} --> Train Loss: {train_loss:.5f}, Val Loss: {val_loss:.5f}")
                     else:
                         if self.LOG_EACH:    print(f"Epoch {epoch+1 :>{spacer_1}}/{num_epochs}, Iteration {iteration%num_batches :>{spacer_2}}/{num_batches} --> Train Loss: {train_loss:.5f}")

@@ -48,6 +48,12 @@ class OptimalConfig:
         
 
 
+def load_df(X, y):
+    df = pd.DataFrame(X)
+    df['label'] = y
+    df['label_name'] = [class_names[label] for label in y]
+    return df
+
 
 def _confusion_matrix(y_true, y_pred, num_classes=None):
     """
@@ -324,7 +330,7 @@ def get_optimizer(name, learning_rate, momentum=0.9, beta = 0.9, beta1 = 0.9, be
     else:
         raise ValueError(f"Optimizer {name} not recognized")
     
-def create_validation_set(X, Y, val_ratio=0.2, seed=None):
+def _create_validation_set(X, Y, val_ratio=0.2, seed=None):
     if seed is not None:
         np.random.seed(seed)
     
@@ -350,10 +356,7 @@ def load_data(dataset_name='fashion_mnist'):
         (X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
     else:
         raise ValueError(f"Dataset {dataset_name} not recognized")
-    (X_train, X_val, y_train, y_val) = create_validation_set(X_train, y_train, val_ratio=0.1, seed=42)
-
-    # class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 
-    #             'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+    (X_train, X_val, y_train, y_val) = _create_validation_set(X_train, y_train, val_ratio=0.1, seed=42)
 
     X_train_flat = X_train.reshape(X_train.shape[0], -1) / 255.0
     X_val_flat = X_val.reshape(X_val.shape[0], -1) / 255.0
