@@ -64,20 +64,21 @@ class NeuralNetwork:
         else:
             raise ValueError(f"Unsupported activation function: {activation}")
     
-    def _activate_derivative(self, Z, A, activation):
+    def _activate_derivative(self, A, H, activation):
         """Calculate derivative of activation function"""
         if activation.lower() == 'sigmoid':
-            return A * (1 - A)
+            return H * (1 - H)
         elif activation.lower() == 'relu':
-            return (Z > 0).astype(float)
+            return (A > 0).astype(float)
         elif activation.lower() == 'tanh':
-            return 1 - A**2
+            return 1 - H**2
         elif activation.lower() == 'identity':
             return 1
-        elif activation.lower() == 'softmax':
+        elif activation.lower() == 'softmax':            
             return 1
         else:
             raise ValueError(f"Unsupported activation function: {activation}")
+
     
     def forward_propagation(self, X):
         H = [X]
@@ -105,17 +106,15 @@ class NeuralNetwork:
             
         return loss
     
-    def _loss_derivative(self, H_final, y, loss_type):
+    def _loss_derivative(self, y_pred, y, loss_type):
         if loss_type.lower() == 'cross_entropy':
             epsilon = 1e-15
-            return -y / (H_final + epsilon)
+            return -y / (y_pred + epsilon)
         elif loss_type.lower() == 'mse' or loss_type.lower() == 'mean_squared_error':
-            # The derivative of MSE is (prediction - target)
-            # No need to reshape if y is already in the right shape
             if y.ndim == 1:
                 y = self.one_hot(y)
             m = y.shape[0]  # Number of examples
-            return (H_final - y) / m  # Divide by m for proper scaling
+            return (y_pred - y) / m  # Divide by m for proper scaling
         else:
             raise ValueError(f"Unsupported loss function: {loss_type}")
     
@@ -180,7 +179,7 @@ class NeuralNetwork:
         return np.mean(y_pred == y)
     
     def train(self, X_train, y_train, X_val=None, y_val=None, 
-              batch_size=32, num_epochs=100, loss_type='cross_entropy', 
+              batch_size=64, num_epochs=10, loss_type='cross_entropy', 
               log_every=100, callback=None):
         
         if self.optimizer is None:
