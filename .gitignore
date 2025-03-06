@@ -1,7 +1,7 @@
 wandb/
+confusion_matrices/
+plots/
 ref.md
 utils/__pycache__
 progress.xlsx
-confusion_matrices/
-plots/
 ~$progress.xlsx

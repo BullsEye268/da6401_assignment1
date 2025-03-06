@@ -1,5 +1,6 @@
 import numpy as np
-import argparse
+import wandb
+import plotly.io as pio
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -46,6 +47,44 @@ class OptimalConfig:
         print(f"hidden_size: {self.hidden_size}")
         print(f"activation: {self.activation}")
         
+
+def log_plotly_confusion_matrix_to_wandb(fig, run_id=0):
+    """
+    Log a Plotly confusion matrix to Weights & Biases
+    
+    Parameters:
+    -----------
+    fig : plotly.graph_objects.Figure
+        Plotly figure to log
+    run_id : int
+        Run identifier
+    
+    Returns:
+    --------
+    html_path : str
+        Path to the saved HTML file
+    """
+    
+    print(f"Starting Logging confusion matrix for run {run_id+1}")
+    # Save the figure as HTML and PNG
+    html_path = f"./confusion_matrices/confusion_matrix_run_{run_id+1}.html"
+    png_path = f"./confusion_matrices/confusion_matrix_run_{run_id+1}.png"
+    
+    # Save as interactive HTML
+    pio.write_html(fig, file=html_path, auto_open=False)
+    print('saved html file')
+    
+    # Save as static PNG for wandb image logging
+    # pio.write_image(fig, file=png_path)
+    print('saved png file')
+    
+    # Log both versions to wandb
+    wandb.log({
+        "confusion_matrix_interactive": wandb.Html(html_path),
+        # "confusion_matrix_image": wandb.Image(png_path)
+    })
+    print('DONE')
+    return html_path
 
 
 def load_df(X, y):

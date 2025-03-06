@@ -23,9 +23,10 @@ class WandbTrainer:
     def __init__(self, dataset_name='fashion_mnist'):
         self.callback = WandbCallback()
         self.X_train, self.y_train, self.X_val, self.y_val, self.X_test, self.y_test = load_data(dataset_name=dataset_name)
+        self.group = f"sweep-{datetime.datetime.now().strftime('%Y%m%d-%H:%M:%S')}"
     
     def train(self):
-        with wandb.init() as run:
+        with wandb.init(group=self.group) as run:
             run_name = f"hl:{wandb.config.hidden_layers}_hs:{wandb.config.hidden_size}_bs:{wandb.config.batch_size}_act:{wandb.config.activation}"
             # print('run name is supposed to be ', run_name, run.name)
             run.name = run_name
