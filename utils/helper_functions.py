@@ -331,7 +331,7 @@ def plot_loss_comparison(ce_histories, ce_models, mse_histories, mse_models, epo
     mse_colors = {"train": "#d62728", "val": "#ff9896"}
     
     # Second figure:   
-    plt.figure(figsize=(16, 10))
+    plt.figure(figsize=(16, 10), dpi=150)
     gs = GridSpec(2, 1, figure=plt.gcf(), height_ratios=[1, 1])
     
     early_epochs = min(10, epochs)
