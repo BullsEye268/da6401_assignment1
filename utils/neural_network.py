@@ -1,3 +1,4 @@
+import wandb
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -181,7 +182,6 @@ class NeuralNetwork:
     def train(self, X_train, y_train, X_val=None, y_val=None, 
               batch_size=64, num_epochs=10, loss_type='cross_entropy', 
               log_every=100, callback=None):
-        
         if self.optimizer is None:
             self.set_optimizer({'name':'sgd', 'learning_rate':0.01})
         

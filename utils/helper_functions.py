@@ -303,3 +303,223 @@ def load_data(dataset_name='fashion_mnist'):
     X_test_flat = X_test.reshape(X_test.shape[0], -1) / 255.0
     
     return X_train_flat, y_train, X_val_flat, y_val, X_test_flat, y_test
+
+def plot_loss_comparison(ce_histories, ce_models, mse_histories, mse_models, epochs, num_runs=5):
+    
+    from matplotlib.gridspec import GridSpec
+    sns.set_theme(style="whitegrid")
+    plt.rcParams['font.family'] = 'sans-serif'
+    plt.rcParams['font.sans-serif'] = ['Arial', 'Helvetica', 'DejaVu Sans']
+    plt.rcParams['axes.edgecolor'] = '#333333'
+    plt.rcParams['axes.linewidth'] = 0.8
+    plt.rcParams['xtick.color'] = '#333333'
+    plt.rcParams['ytick.color'] = '#333333'
+    
+    
+    def average_metrics(histories):
+        train_loss = np.mean([h['train_loss'] for h in histories], axis=0)
+        train_acc = np.mean([h['train_acc'] for h in histories], axis=0)
+        val_loss = np.mean([h['val_loss'] for h in histories], axis=0)
+        val_acc = np.mean([h['val_acc'] for h in histories], axis=0)
+        return train_loss, train_acc, val_loss, val_acc
+    
+    train_loss_ce, train_acc_ce, val_loss_ce, val_acc_ce = average_metrics(ce_histories)
+    train_loss_mse, train_acc_mse, val_loss_mse, val_acc_mse = average_metrics(mse_histories)
+    
+    # Define color palettes
+    ce_colors = {"train": "#1f77b4", "val": "#7fbfff"}
+    mse_colors = {"train": "#d62728", "val": "#ff9896"}
+    
+    # Second figure: Early convergence
+    plt.figure(figsize=(16, 10))
+    gs = GridSpec(2, 1, figure=plt.gcf(), height_ratios=[1, 1])
+    
+    early_epochs = min(10, epochs)
+    
+    ax3 = plt.subplot(gs[0, :])
+    ax3.plot(train_loss_ce[:early_epochs], label='Cross Entropy - Training', color=ce_colors["train"], linewidth=2, marker='o', markersize=5)
+    ax3.plot(val_loss_ce[:early_epochs], label='Cross Entropy - Validation', color=ce_colors["val"], linewidth=2, linestyle='--', marker='o', markersize=5)
+    ax3.plot(train_loss_mse[:early_epochs], label='MSE - Training', color=mse_colors["train"], linewidth=2, marker='s', markersize=5)
+    ax3.plot(val_loss_mse[:early_epochs], label='MSE - Validation', color=mse_colors["val"], linewidth=2, linestyle='--', marker='s', markersize=5)
+    
+    ax3.set_xlabel('Epochs', fontsize=12, fontweight='bold')
+    ax3.set_ylabel('Loss Value', fontsize=12, fontweight='bold')
+    ax3.set_title(f'Early Convergence - Loss (Avg of {num_runs} runs): Cross Entropy vs. Mean Squared Error', 
+                  fontsize=18, fontweight='bold', pad=15)
+    ax3.legend(loc='upper right', frameon=True, framealpha=0.9, fontsize=10)
+    ax3.grid(True, linestyle='--', alpha=0.7)
+    ax3.spines['top'].set_visible(False)
+    ax3.spines['right'].set_visible(False)
+    
+    ax4 = plt.subplot(gs[1, :])
+    ax4.plot(train_acc_ce[:early_epochs], label='Cross Entropy - Training', color=ce_colors["train"], linewidth=2, marker='o', markersize=5)
+    ax4.plot(val_acc_ce[:early_epochs], label='Cross Entropy - Validation', color=ce_colors["val"], linewidth=2, linestyle='--', marker='o', markersize=5)
+    ax4.plot(train_acc_mse[:early_epochs], label='MSE - Training', color=mse_colors["train"], linewidth=2, marker='s', markersize=5)
+    ax4.plot(val_acc_mse[:early_epochs], label='MSE - Validation', color=mse_colors["val"], linewidth=2, linestyle='--', marker='s', markersize=5)
+    
+    ax4.set_xlabel('Epochs', fontsize=12, fontweight='bold')
+    ax4.set_ylabel('Accuracy', fontsize=12, fontweight='bold')
+    ax4.set_title(f'Early Convergence - Accuracy (Avg of {num_runs} runs): Cross Entropy vs. Mean Squared Error', 
+                  fontsize=18, fontweight='bold', pad=15)
+    ax4.legend(loc='lower right', frameon=True, framealpha=0.9, fontsize=10)
+    ax4.grid(True, linestyle='--', alpha=0.7)
+    ax4.spines['top'].set_visible(False)
+    ax4.spines['right'].set_visible(False)
+    
+    textstr = '\n'.join((
+        'Key Observations:',
+        f'Cross Entropy @ 10 epochs: {val_acc_ce[min(10, len(val_acc_ce)-1)]:.4f}',
+        f'MSE @ 10 epochs: {val_acc_mse[min(10, len(val_acc_mse)-1)]:.4f}',
+        f'CE improvement rate: {(val_acc_ce[early_epochs-1] - val_acc_ce[0])/early_epochs:.4f}/epoch',
+        f'MSE improvement rate: {(val_acc_mse[early_epochs-1] - val_acc_mse[0])/early_epochs:.4f}/epoch'
+    ))
+    
+    props = dict(boxstyle='round', facecolor='wheat', alpha=0.8)
+    ax4.text(0.02, 0.95, textstr, transform=ax4.transAxes, fontsize=12,
+            verticalalignment='top', bbox=props)
+    
+    # plt.figtext(0.5, 0.01, f"Loss Function Analysis (Averaged over {num_runs} runs)", 
+    #             ha="center", fontsize=14, fontstyle='italic')
+    
+    plt.tight_layout()
+    plt.savefig('./plots/early_convergence_comparison_avg.png', dpi=300, bbox_inches='tight')
+    plt.show()
+    
+    results = {
+        'cross_entropy': ce_models,
+        'mse': mse_models,
+        'metrics': {
+            'ce': {
+                'train_loss': train_loss_ce,
+                'val_loss': val_loss_ce,
+                'train_acc': train_acc_ce,
+                'val_acc': val_acc_ce,
+                'all_histories': ce_histories  # Store all runs for potential further analysis
+            },
+            'mse': {
+                'train_loss': train_loss_mse,
+                'val_loss': val_loss_mse,
+                'train_acc': train_acc_mse,
+                'val_acc': val_acc_mse,
+                'all_histories': mse_histories
+            }
+        }
+    }
+    
+    __analyze_results(results=results)
+    
+    return results
+
+def __analyze_results(results):
+    """
+    Analyze and print the final performance metrics with enhanced visuals
+    """
+    ce_metrics = results['metrics']['ce']
+    mse_metrics = results['metrics']['mse']
+    
+    plt.figure(figsize=(12, 8))
+    sns.set_style("whitegrid")
+    
+    metrics_names = ['Final Val Accuracy', 'Convergence Speed (epochs)', 'Overfit Gap']
+    
+    # Calculate the metrics
+    ce_final_acc = ce_metrics['val_acc'][-1]
+    mse_final_acc = mse_metrics['val_acc'][-1]
+    
+    ce_threshold = 0.9 * ce_final_acc
+    mse_threshold = 0.9 * mse_final_acc
+    
+    ce_convergence = next((i for i, acc in enumerate(ce_metrics['val_acc']) if acc >= ce_threshold), len(ce_metrics['val_acc']))
+    mse_convergence = next((i for i, acc in enumerate(mse_metrics['val_acc']) if acc >= mse_threshold), len(mse_metrics['val_acc']))
+    
+    ce_overfit = ce_metrics['train_acc'][-1] - ce_metrics['val_acc'][-1]
+    mse_overfit = mse_metrics['train_acc'][-1] - mse_metrics['val_acc'][-1]
+    
+    # Create values for visualization with epsilon to avoid division by zero
+    EPSILON = 1e-10  # Small value to prevent division by zero
+    ce_values = [ce_final_acc, 1.0/(ce_convergence + EPSILON), 1.0-ce_overfit]
+    mse_values = [mse_final_acc, 1.0/(mse_convergence + EPSILON), 1.0-mse_overfit]
+    
+    # Normalize values safely
+    ce_values_norm = []
+    mse_values_norm = []
+    for i, (ce_v, mse_v) in enumerate(zip(ce_values, mse_values)):
+        max_val = max(abs(ce_v), abs(mse_v), EPSILON)  # Use abs to handle negative values and ensure non-zero
+        ce_values_norm.append(ce_v / max_val)
+        mse_values_norm.append(mse_v / max_val)
+    
+    # Close the circle for radar chart
+    ce_values_norm += ce_values_norm[:1]
+    mse_values_norm += mse_values_norm[:1]
+    
+    # Create radar chart
+    categories = ['Accuracy', 'Convergence\nSpeed', 'Resistance to\nOverfitting']
+    angles = np.linspace(0, 2*np.pi, len(categories), endpoint=False).tolist()
+    angles += angles[:1]
+    
+    ax = plt.subplot(111, polar=True)
+    
+    ax.plot(angles, ce_values_norm, 'o-', linewidth=2, label='Cross Entropy', color='#1f77b4')
+    ax.fill(angles, ce_values_norm, alpha=0.25, color='#1f77b4')
+    
+    ax.plot(angles, mse_values_norm, 'o-', linewidth=2, label='MSE', color='#d62728')
+    ax.fill(angles, mse_values_norm, alpha=0.25, color='#d62728')
+    
+    ax.set_thetagrids(np.degrees(angles[:-1]), categories)
+    
+    plt.legend(loc='upper right', bbox_to_anchor=(0.1, 1.1))
+    plt.title('Cross Entropy vs MSE Performance Comparison', size=15, fontweight='bold', y=1.1)
+    
+    plt.figtext(0.15, 0.55, f"CE Final Accuracy: {ce_final_acc:.4f}\nMSE Final Accuracy: {mse_final_acc:.4f}", 
+                ha="left", bbox={"boxstyle": "round,pad=0.5", "facecolor": "white", "alpha": 0.8})
+    
+    plt.figtext(0.15, 0.45, f"CE Convergence: {ce_convergence} epochs\nMSE Convergence: {mse_convergence} epochs", 
+                ha="left", bbox={"boxstyle": "round,pad=0.5", "facecolor": "white", "alpha": 0.8})
+    
+    plt.figtext(0.15, 0.35, f"CE Overfit Gap: {ce_overfit:.4f}\nMSE Overfit Gap: {mse_overfit:.4f}", 
+                ha="left", bbox={"boxstyle": "round,pad=0.5", "facecolor": "white", "alpha": 0.8})
+    
+    plt.tight_layout()
+    plt.savefig('./plots/performance_radar.png', dpi=300, bbox_inches='tight')
+    plt.show()
+    
+    print("=== CROSS ENTROPY VS MSE COMPARISON ===")
+    print(f"Final Cross Entropy Validation Accuracy: {ce_final_acc:.4f}")
+    print(f"Final MSE Validation Accuracy: {mse_final_acc:.4f}")
+    
+    print(f"\nConvergence Speed (epochs to reach 90% of final accuracy):")
+    print(f"Cross Entropy: {ce_convergence}")
+    print(f"MSE: {mse_convergence}")
+    
+    print(f"\nOverfitting Assessment (train_acc - val_acc):")
+    print(f"Cross Entropy: {ce_overfit:.4f}")
+    print(f"MSE: {mse_overfit:.4f}")
+    
+    if ce_final_acc > mse_final_acc:
+        acc_winner = "Cross Entropy"
+    else:
+        acc_winner = "MSE"
+        
+    if ce_convergence < mse_convergence:
+        conv_winner = "Cross Entropy"
+    else:
+        conv_winner = "MSE"
+        
+    if ce_overfit < mse_overfit:
+        overfit_winner = "Cross Entropy"
+    else:
+        overfit_winner = "MSE"
+    
+    print("\n=== CONCLUSION ===")
+    print(f"Best for Accuracy: {acc_winner}")
+    print(f"Best for Convergence Speed: {conv_winner}")
+    print(f"Best for Avoiding Overfitting: {overfit_winner}")
+    
+    return {
+        'ce_convergence': ce_convergence,
+        'mse_convergence': mse_convergence,
+        'ce_overfit': ce_overfit,
+        'mse_overfit': mse_overfit,
+        'ce_final_acc': ce_final_acc,
+        'mse_final_acc': mse_final_acc
+    }

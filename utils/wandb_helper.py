@@ -1,6 +1,7 @@
 import wandb
 import numpy as np
 import datetime
+from IPython.display import clear_output
 
 from .neural_network import NeuralNetwork
 from .helper_functions import load_data, get_optimizer
@@ -10,14 +11,18 @@ class WandbCallback:
         self.epoch = 0
     
     def on_epoch_end(self, loss, accuracy, val_loss, val_accuracy):
-        wandb.log({
-            "epoch": self.epoch,
-            "train_loss": loss,
-            "train_accuracy": accuracy,
-            "val_loss": val_loss,
-            "val_accuracy": val_accuracy,
-        })
-        self.epoch += 1
+        if wandb.run is not None:
+            wandb.log({
+                "epoch": self.epoch,
+                "train_loss": loss,
+                "train_accuracy": accuracy,
+                "val_loss": val_loss,
+                "val_accuracy": val_accuracy,
+            })
+            self.epoch += 1
+            # wandb.log(data)
+        else:
+            raise ValueError("Warning: Attempted to log to wandb before initialization")
 
 class WandbTrainer:
     def __init__(self, dataset_name='fashion_mnist'):
@@ -26,7 +31,7 @@ class WandbTrainer:
         self.group = f"sweep-{datetime.datetime.now().strftime('%Y%m%d-%H:%M:%S')}"
     
     def train(self):
-        with wandb.init(group=self.group) as run:
+        with wandb.init(group=self.group, tags=["sweep"]) as run:
             run_name = f"hl:{wandb.config.hidden_layers}_hs:{wandb.config.hidden_size}_bs:{wandb.config.batch_size}_act:{wandb.config.activation}"
             # print('run name is supposed to be ', run_name, run.name)
             run.name = run_name
@@ -61,20 +66,22 @@ class WandbTrainer:
             
             test_accuracy = nn.compute_accuracy(self.X_test, self.y_test)
             wandb.log({"test_accuracy": test_accuracy})
+            clear_output(wait=True)
         
         return
 
-def log_images(X, y):
+def log_images(X, y, entity, project):
     # Initialize a W&B run
     wandb.init(
-        entity="bullseye2608-indian-institute-of-technology-madras",
-        project="my-awesome-project", 
-        name="Images_"+datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        entity=entity,
+        project=project, 
+        name="Images_"+datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        tags=['image_examples']
     )
     
     class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
                    'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
-
+    
     # Log images to W&B
     wandb.log({
         "fashion_mnist_samples": [
