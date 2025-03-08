@@ -330,7 +330,7 @@ def plot_loss_comparison(ce_histories, ce_models, mse_histories, mse_models, epo
     ce_colors = {"train": "#1f77b4", "val": "#7fbfff"}
     mse_colors = {"train": "#d62728", "val": "#ff9896"}
     
-    # Second figure: Early convergence
+    # Second figure:   
     plt.figure(figsize=(16, 10))
     gs = GridSpec(2, 1, figure=plt.gcf(), height_ratios=[1, 1])
     
@@ -344,7 +344,7 @@ def plot_loss_comparison(ce_histories, ce_models, mse_histories, mse_models, epo
     
     ax3.set_xlabel('Epochs', fontsize=12, fontweight='bold')
     ax3.set_ylabel('Loss Value', fontsize=12, fontweight='bold')
-    ax3.set_title(f'Early Convergence - Loss (Avg of {num_runs} runs): Cross Entropy vs. Mean Squared Error', 
+    ax3.set_title(f'Loss (Avg of {num_runs} runs): Cross Entropy vs. Mean Squared Error', 
                   fontsize=18, fontweight='bold', pad=15)
     ax3.legend(loc='upper right', frameon=True, framealpha=0.9, fontsize=10)
     ax3.grid(True, linestyle='--', alpha=0.7)
@@ -359,7 +359,7 @@ def plot_loss_comparison(ce_histories, ce_models, mse_histories, mse_models, epo
     
     ax4.set_xlabel('Epochs', fontsize=12, fontweight='bold')
     ax4.set_ylabel('Accuracy', fontsize=12, fontweight='bold')
-    ax4.set_title(f'Early Convergence - Accuracy (Avg of {num_runs} runs): Cross Entropy vs. Mean Squared Error', 
+    ax4.set_title(f'Accuracy (Avg of {num_runs} runs): Cross Entropy vs. Mean Squared Error', 
                   fontsize=18, fontweight='bold', pad=15)
     ax4.legend(loc='lower right', frameon=True, framealpha=0.9, fontsize=10)
     ax4.grid(True, linestyle='--', alpha=0.7)
