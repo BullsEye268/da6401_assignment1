@@ -382,7 +382,7 @@ def plot_loss_comparison(ce_histories, ce_models, mse_histories, mse_models, epo
     #             ha="center", fontsize=14, fontstyle='italic')
     
     plt.tight_layout()
-    plt.savefig('./plots/early_convergence_comparison_avg.png', dpi=300, bbox_inches='tight')
+    plt.savefig('./helper_plots/early_convergence_comparison_avg.png', dpi=300, bbox_inches='tight')
     plt.show()
     
     results = {
@@ -480,7 +480,7 @@ def __analyze_results(results):
                 ha="left", bbox={"boxstyle": "round,pad=0.5", "facecolor": "white", "alpha": 0.8})
     
     plt.tight_layout()
-    plt.savefig('./plots/performance_radar.png', dpi=300, bbox_inches='tight')
+    plt.savefig('./helper_plots/performance_radar.png', dpi=300, bbox_inches='tight')
     plt.show()
     
     print("=== CROSS ENTROPY VS MSE COMPARISON ===")
