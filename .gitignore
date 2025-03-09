@@ -1,6 +1,5 @@
 wandb/
 confusion_matrices/
-helper_plots/
 ref.md
 utils/__pycache__
 progress.xlsx

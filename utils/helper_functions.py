@@ -67,8 +67,8 @@ def log_plotly_confusion_matrix_to_wandb(fig, run_id=0):
     
     print(f"Starting Logging confusion matrix for run {run_id+1}")
     # Save the figure as HTML and PNG
-    html_path = f"./confusion_matrices/confusion_matrix_run_{run_id+1}.html"
-    png_path = f"./confusion_matrices/confusion_matrix_run_{run_id+1}.png"
+    html_path = f"./plots/confusion_matrix_run_{run_id+1}.html"
+    png_path = f"./plots/confusion_matrix_run_{run_id+1}.png"
     
     # Save as interactive HTML
     pio.write_html(fig, file=html_path, auto_open=False)
@@ -159,13 +159,13 @@ def plot_confusion_matrix(y_true, y_pred, run_id):
     f1 = 2 * precision * recall / (precision + recall)
     
     # Save and return the figure
-    cm_filename = f"./confusion_matrices/confusion_matrix_run_{run_id+1}.png"
+    cm_filename = f"./plots/confusion_matrix_run_{run_id+1}.png"
     plt.savefig(cm_filename, dpi=300, bbox_inches='tight')
     plt.close()
     
     return cm_filename, cm, precision, recall, f1
 
-def create_plotly_confusion_matrix(cm, class_names, run_id=0):
+def create_plotly_confusion_matrix(cm, class_names, num_runs):
     """
     Create an interactive confusion matrix using Plotly.js
     
@@ -196,7 +196,7 @@ def create_plotly_confusion_matrix(cm, class_names, run_id=0):
         x=class_names,
         y=class_names,
         colorscale='Blues',
-        text=cm,  # Show raw counts on hover
+        text=np.round(cm, decimals=1),  # Show raw counts on hover
         texttemplate="%{text}",
         hovertemplate="True: %{y}<br>Predicted: %{x}<br>Count: %{text}<br>Rate: %{z:.2f}<extra></extra>",
     ))
@@ -207,7 +207,7 @@ def create_plotly_confusion_matrix(cm, class_names, run_id=0):
     # Add title and labels
     fig.update_layout(
         title={
-            'text': f'Confusion Matrix - Run {run_id+1}<br><sup>Accuracy: {accuracy:.4f}</sup>',
+            'text': f'Confusion Matrix - Avg. of {num_runs}<br><sup>Accuracy: {accuracy:.4f}</sup>',
             'y': 0.9,
             'x': 0.5,
             'xanchor': 'center',
@@ -221,22 +221,6 @@ def create_plotly_confusion_matrix(cm, class_names, run_id=0):
         font=dict(size=12)
     )
     
-    # Add diagonal line effect
-    diagonal_effect = []
-    for i in range(len(class_names)):
-        diagonal_effect.append(
-            go.Scatter(
-                x=[i-0.5, i+0.5],
-                y=[i-0.5, i+0.5],
-                mode='lines',
-                line=dict(color='rgba(0,0,0,0.3)', width=1.5),
-                showlegend=False,
-                hoverinfo='none'
-            )
-        )
-    
-    for effect in diagonal_effect:
-        fig.add_trace(effect)
     
     # fig.update_layout(annotations=annotations)
     # zoom in
@@ -382,7 +366,7 @@ def plot_loss_comparison(ce_histories, ce_models, mse_histories, mse_models, epo
     #             ha="center", fontsize=14, fontstyle='italic')
     
     plt.tight_layout()
-    plt.savefig('./helper_plots/early_convergence_comparison_avg.png', dpi=300, bbox_inches='tight')
+    plt.savefig('./plots/early_convergence_comparison_avg.png', dpi=300, bbox_inches='tight')
     plt.show()
     
     results = {
@@ -480,7 +464,7 @@ def __analyze_results(results):
                 ha="left", bbox={"boxstyle": "round,pad=0.5", "facecolor": "white", "alpha": 0.8})
     
     plt.tight_layout()
-    plt.savefig('./helper_plots/performance_radar.png', dpi=300, bbox_inches='tight')
+    plt.savefig('./plots/performance_radar.png', dpi=300, bbox_inches='tight')
     plt.show()
     
     print("=== CROSS ENTROPY VS MSE COMPARISON ===")
