@@ -10,7 +10,7 @@ def parse_args():
     )
     parser.add_argument(
         "-wp", "--wandb_project",
-        default="fashion_mnist_hp_search",
+        default="PH21B004_DA6401-Assignment-1",
         help="Project name used to track experiments in Weights & Biases dashboard"
     )
     parser.add_argument(
