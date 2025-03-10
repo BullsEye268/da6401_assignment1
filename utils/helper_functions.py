@@ -67,23 +67,16 @@ def log_plotly_confusion_matrix_to_wandb(fig, run_id=0):
     
     print(f"Starting Logging confusion matrix for run {run_id+1}")
     # Save the figure as HTML and PNG
-    html_path = f"./plots/confusion_matrix_run_{run_id+1}.html"
-    png_path = f"./plots/confusion_matrix_run_{run_id+1}.png"
+    html_path = f"./plots/aggregate_confusion_matrix.html"
     
     # Save as interactive HTML
     pio.write_html(fig, file=html_path, auto_open=False)
-    print('saved html file')
-    
-    # Save as static PNG for wandb image logging
-    # pio.write_image(fig, file=png_path)
-    print('saved png file')
     
     # Log both versions to wandb
     wandb.log({
         "confusion_matrix_interactive": wandb.Html(html_path),
         # "confusion_matrix_image": wandb.Image(png_path)
     })
-    print('DONE')
     return html_path
 
 
