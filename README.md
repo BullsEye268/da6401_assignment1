@@ -31,6 +31,7 @@ This project implements a feedforward neural network from scratch using NumPy to
     ```
 3.  **Set up Wandb:**
     - Create a Wandb account and log in using `wandb login`.
+    - Or, use the python functionality `wandb.login()`
 
 ## Usage
 
@@ -41,7 +42,7 @@ This project implements a feedforward neural network from scratch using NumPy to
     - `final.ipynb` contains the final execution of the code, with cells segregated by question numbers from the assignment.
 3.  **Use Wandb:**
     - View experiment results, visualizations, and hyperparameter tuning insights on the Wandb dashboard.
-    - Use the link of the report generated on wandb.ai to check the results.
+    - Use the link of the [report generated on wandb.ai](https://api.wandb.ai/links/bullseye2608-indian-institute-of-technology-madras/rj51csft) to check the results.
 4.  **Plotting images:**
     - To plot the images, use the `utils/wandb_helper.py` file, and the `log_images` function.
 5.  **Using train.py with command line arguments:**
@@ -51,7 +52,7 @@ This project implements a feedforward neural network from scratch using NumPy to
       ```
     - You can also specify other arguments to customize the training process. For example:
       ```bash
-      python train.py --wandb_entity <your_wandb_entity> --wandb_project <your_wandb_project>
+        python train.py --wandb_entity <your_wandb_entity> --wandb_project <your_wandb_project> --epochs 10 --batch_size 32 --learning_rate 0.001 --optimizer adam
       ```
 
 ## Code Specifications
