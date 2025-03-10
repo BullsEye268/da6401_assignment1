@@ -14,6 +14,26 @@ class OptimalConfig:
     def __init__(self, epochs=10, batch_size=64, loss="cross_entropy", optimizer="adam",
                  learning_rate=0.001, momentum=0.9, beta=0.9, beta1=0.9, beta2=0.999, epsilon=1e-8,
                  weight_decay=0, weight_init="xavier", num_layers=3, hidden_size=128, activation="relu"):
+        """
+        Description: Initializes an OptimalConfig object with hyperparameters for a neural network
+        Input format: 
+          - epochs: int (number of training epochs, default=10)
+          - batch_size: int (size of training batches, default=64)
+          - loss: str (loss function name, default="cross_entropy")
+          - optimizer: str (optimizer name, default="adam")
+          - learning_rate: float (learning rate, default=0.001)
+          - momentum: float (momentum for optimizers, default=0.9)
+          - beta: float (beta for RMSprop, default=0.9)
+          - beta1: float (beta1 for Adam/Nadam, default=0.9)
+          - beta2: float (beta2 for Adam/Nadam, default=0.999)
+          - epsilon: float (epsilon for numerical stability, default=1e-8)
+          - weight_decay: float (weight decay coefficient, default=0)
+          - weight_init: str (weight initialization method, default="xavier")
+          - num_layers: int (number of hidden layers, default=3)
+          - hidden_size: int (size of hidden layers, default=128)
+          - activation: str (activation function name, default="relu")
+        Output format: None (creates instance with specified attributes)
+        """
         self.epochs = epochs
         self.batch_size = batch_size
         self.loss = loss
@@ -31,6 +51,11 @@ class OptimalConfig:
         self.activation = activation
     
     def print_config(self):
+        """
+        Description: Prints all configuration parameters of the OptimalConfig instance
+        Input format: None (uses instance attributes)
+        Output format: None (prints to console)
+        """
         print(f"epochs: {self.epochs}")
         print(f"batch_size: {self.batch_size}")
         print(f"loss: {self.loss}")
@@ -46,25 +71,130 @@ class OptimalConfig:
         print(f"num_layers: {self.num_layers}")
         print(f"hidden_size: {self.hidden_size}")
         print(f"activation: {self.activation}")
-        
+       
 
+def load_data(dataset_name='fashion_mnist'):
+    """
+    Description: Loads and preprocesses MNIST or Fashion MNIST dataset
+    Input format:
+      - dataset_name: str ('mnist' or 'fashion_mnist', default='fashion_mnist')
+    Output format:
+      - X_train_flat: numpy.ndarray (flattened training features)
+      - y_train: numpy.ndarray (training labels)
+      - X_val_flat: numpy.ndarray (flattened validation features)
+      - y_val: numpy.ndarray (validation labels)
+      - X_test_flat: numpy.ndarray (flattened test features)
+      - y_test: numpy.ndarray (test labels)
+    """
+    if dataset_name == 'mnist':
+        from keras.datasets import mnist
+        (X_train, y_train), (X_test, y_test) = mnist.load_data()
+    elif dataset_name == 'fashion_mnist':
+        from keras.datasets import fashion_mnist
+        (X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
+    else:
+        raise ValueError(f"Dataset {dataset_name} not recognized")
+    (X_train, X_val, y_train, y_val) = _create_validation_set(X_train, y_train, val_ratio=0.1, seed=42)
+
+    X_train_flat = X_train.reshape(X_train.shape[0], -1) / 255.0
+    X_val_flat = X_val.reshape(X_val.shape[0], -1) / 255.0
+    X_test_flat = X_test.reshape(X_test.shape[0], -1) / 255.0
+    
+    return X_train_flat, y_train, X_val_flat, y_val, X_test_flat, y_test
+
+def _create_validation_set(X, Y, val_ratio=0.2, seed=None):
+    """
+    Description: Splits dataset into training and validation sets
+    Input format:
+      - X: numpy.ndarray (feature matrix of shape (n_samples, n_features))
+      - Y: numpy.ndarray (label array of shape (n_samples,))
+      - val_ratio: float (validation set proportion, default=0.2)
+      - seed: int or None (random seed for reproducibility, default=None)
+    Output format:
+      - X_train: numpy.ndarray (training features)
+      - X_val: numpy.ndarray (validation features)
+      - Y_train: numpy.ndarray (training labels)
+      - Y_val: numpy.ndarray (validation labels)
+    """
+    if seed is not None:
+        np.random.seed(seed)
+    
+    n_samples = X.shape[0]
+    indices = np.random.permutation(n_samples)
+    split_index = int(n_samples * (1 - val_ratio))
+    train_indices = indices[:split_index]
+    val_indices = indices[split_index:]
+    
+    X_train = X[train_indices]
+    Y_train = Y[train_indices]
+    X_val = X[val_indices]
+    Y_val = Y[val_indices]
+    
+    return X_train, X_val, Y_train, Y_val
+
+def load_df(X, y):
+    """
+    Description: Creates a pandas DataFrame from input features and labels
+    Input format:
+      - X: numpy.ndarray (feature matrix of shape (n_samples, n_features))
+      - y: numpy.ndarray (label array of shape (n_samples,))
+    Output format:
+      - df: pandas.DataFrame (DataFrame with features, numeric labels, and class names)
+    """
+    df = pd.DataFrame(X)
+    df['label'] = y
+    df['label_name'] = [class_names[label] for label in y]
+    return df
+
+def run_name_generator(config):
+    """
+    Description: Generates a run name string based on configuration parameters
+    Input format:
+      - config: OptimalConfig (configuration object with attributes)
+    Output format:
+      - run_name: str (formatted string with configuration details)
+    """
+    run_name = f"hl:{config.num_layers}_hs:{config.hidden_size}_bs:{config.batch_size}_act:{config.activation}"
+    return run_name
+    
+def get_optimizer(name, learning_rate, momentum=0.9, beta = 0.9, beta1 = 0.9, beta2 = 0.999, epsilon = 1e-8):
+    """
+    Description: Returns optimizer configuration dictionary based on name and parameters
+    Input format:
+      - name: str (optimizer name: 'sgd', 'momentum', 'nesterov', 'rmsprop', 'adam', 'nadam')
+      - learning_rate: float (learning rate)
+      - momentum: float (momentum parameter, default=0.9)
+      - beta: float (beta for RMSprop, default=0.9)
+      - beta1: float (beta1 for Adam/Nadam, default=0.9)
+      - beta2: float (beta2 for Adam/Nadam, default=0.999)
+      - epsilon: float (epsilon for numerical stability, default=1e-8)
+    Output format:
+      - dict: dictionary containing optimizer name and parameters
+    """
+    if name == 'sgd':
+        return {'name': 'sgd','learning_rate': learning_rate}
+    elif name == 'momentum':
+        return {'name': 'momentum','learning_rate': learning_rate, 'momentum': momentum}
+    elif name == 'nesterov':
+        return {'name': 'nesterov','learning_rate': learning_rate, 'momentum': momentum}
+    elif name == 'rmsprop':
+        return {'name': 'rmsprop','learning_rate': learning_rate, 'beta': beta, 'epsilon': epsilon}
+    elif name == 'adam':
+        return {'name': 'adam','learning_rate': learning_rate, 'beta1': beta1, 'beta2': beta2, 'epsilon': epsilon}
+    elif name == 'nadam':
+        return {'name': 'nadam','learning_rate': learning_rate, 'beta1': beta1, 'beta2': beta2, 'epsilon': epsilon}
+    else:
+        raise ValueError(f"Optimizer {name} not recognized")
+    
 def log_plotly_confusion_matrix_to_wandb(fig, run_id=0):
     """
-    Log a Plotly confusion matrix to Weights & Biases
-    
-    Parameters:
-    -----------
-    fig : plotly.graph_objects.Figure
-        Plotly figure to log
-    run_id : int
-        Run identifier
-    
-    Returns:
-    --------
-    html_path : str
-        Path to the saved HTML file
+    Description: Logs a Plotly confusion matrix figure to Weights & Biases
+    Input format:
+      - fig: plotly.graph_objects.Figure (Plotly figure object containing confusion matrix)
+      - run_id: int (run identifier, default=0)
+    Output format:
+      - html_path: str (path to saved HTML file)
     """
-    
     print(f"Starting Logging confusion matrix for run {run_id+1}")
     # Save the figure as HTML and PNG
     html_path = f"./plots/aggregate_confusion_matrix.html"
@@ -79,31 +209,15 @@ def log_plotly_confusion_matrix_to_wandb(fig, run_id=0):
     })
     return html_path
 
-
-def load_df(X, y):
-    df = pd.DataFrame(X)
-    df['label'] = y
-    df['label_name'] = [class_names[label] for label in y]
-    return df
-
-
 def _confusion_matrix(y_true, y_pred, num_classes=None):
     """
-    Compute confusion matrix to evaluate the accuracy of a classification.
-    
-    Parameters:
-    -----------
-    y_true : array-like, shape (n_samples,)
-        Ground truth (correct) target values.
-    y_pred : array-like, shape (n_samples,)
-        Estimated targets as returned by a classifier.
-    num_classes : int, optional
-        Number of classes. If None, it will be determined from y_true and y_pred.
-        
-    Returns:
-    --------
-    confusion_matrix : ndarray, shape (n_classes, n_classes)
-        Confusion matrix where rows represent true classes and columns represent predicted classes.
+    Description: Computes a confusion matrix to evaluate classification accuracy
+    Input format:
+      - y_true: array-like (ground truth labels, shape (n_samples,) or one-hot (n_samples, n_classes))
+      - y_pred: array-like (predicted labels, shape (n_samples,) or one-hot (n_samples, n_classes))
+      - num_classes: int or None (number of classes, if None inferred from inputs)
+    Output format:
+      - confusion_matrix: numpy.ndarray (confusion matrix of shape (n_classes, n_classes))
     """
     # Ensure inputs are numpy arrays
     y_true = np.array(y_true)
@@ -129,6 +243,19 @@ def _confusion_matrix(y_true, y_pred, num_classes=None):
     return cm
 
 def plot_confusion_matrix(y_true, y_pred, run_id):
+    """
+    Description: Plots and saves a normalized confusion matrix with metrics
+    Input format:
+      - y_true: array-like (ground truth labels, shape (n_samples,))
+      - y_pred: array-like (predicted labels, shape (n_samples,))
+      - run_id: int (run identifier)
+    Output format:
+      - cm_filename: str (path to saved plot)
+      - cm: numpy.ndarray (confusion matrix)
+      - precision: numpy.ndarray (precision per class)
+      - recall: numpy.ndarray (recall per class)
+      - f1: numpy.ndarray (F1 score per class)
+    """
     cm = _confusion_matrix(y_true, y_pred)
     cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     
@@ -160,25 +287,13 @@ def plot_confusion_matrix(y_true, y_pred, run_id):
 
 def create_plotly_confusion_matrix(cm, class_names, num_runs):
     """
-    Create an interactive confusion matrix using Plotly.js
-    
-    Parameters:
-    -----------
-    y_true : array-like
-        Ground truth (correct) target values
-    y_pred : array-like
-        Estimated targets as returned by a classifier
-    class_names : list
-        List of class names (e.g., ['T-shirt', 'Trouser', ...])
-    run_id : int
-        Run identifier for multiple runs
-        
-    Returns:
-    --------
-    fig : plotly.graph_objects.Figure
-        Plotly figure object of the confusion matrix
-    cm : numpy.ndarray
-        Raw confusion matrix
+    Description: Creates an interactive Plotly confusion matrix
+    Input format:
+      - cm: numpy.ndarray (confusion matrix of shape (n_classes, n_classes))
+      - class_names: list (list of class names)
+      - num_runs: int (number of runs averaged)
+    Output format:
+      - fig: plotly.graph_objects.Figure (interactive Plotly figure)
     """
     num_classes = len(class_names)
     cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
@@ -214,75 +329,27 @@ def create_plotly_confusion_matrix(cm, class_names, num_runs):
         font=dict(size=12)
     )
     
-    
-    # fig.update_layout(annotations=annotations)
-    # zoom in
+    # Zoom in
     fig.update_layout(
         xaxis=dict(range=[-0.5, num_classes-0.5]),
         yaxis=dict(range=[-0.5, num_classes-0.5]),
     )
     
-    
     return fig
 
-def run_name_generator(config):
-    run_name = f"hl:{config.num_layers}_hs:{config.hidden_size}_bs:{config.batch_size}_act:{config.activation}"
-    return run_name
-    
-
-def get_optimizer(name, learning_rate, momentum=0.9, beta = 0.9, beta1 = 0.9, beta2 = 0.999, epsilon = 1e-8):
-    # This should match how your NeuralNetwork class handles optimizers
-    if name == 'sgd':
-        return {'name': 'sgd','learning_rate': learning_rate}
-    elif name == 'momentum':
-        return {'name': 'momentum','learning_rate': learning_rate, 'momentum': momentum}
-    elif name == 'nesterov':
-        return {'name': 'nesterov','learning_rate': learning_rate, 'momentum': momentum}
-    elif name == 'rmsprop':
-        return {'name': 'rmsprop','learning_rate': learning_rate, 'beta': beta, 'epsilon': epsilon}
-    elif name == 'adam':
-        return {'name': 'adam','learning_rate': learning_rate, 'beta1': beta1, 'beta2': beta2, 'epsilon': epsilon}
-    elif name == 'nadam':
-        return {'name': 'nadam','learning_rate': learning_rate, 'beta1': beta1, 'beta2': beta2, 'epsilon': epsilon}
-    else:
-        raise ValueError(f"Optimizer {name} not recognized")
-    
-def _create_validation_set(X, Y, val_ratio=0.2, seed=None):
-    if seed is not None:
-        np.random.seed(seed)
-    
-    n_samples = X.shape[0]
-    indices = np.random.permutation(n_samples)
-    split_index = int(n_samples * (1 - val_ratio))
-    train_indices = indices[:split_index]
-    val_indices = indices[split_index:]
-    
-    X_train = X[train_indices]
-    Y_train = Y[train_indices]
-    X_val = X[val_indices]
-    Y_val = Y[val_indices]
-    
-    return X_train, X_val, Y_train, Y_val
-
-def load_data(dataset_name='fashion_mnist'):
-    if dataset_name == 'mnist':
-        from keras.datasets import mnist
-        (X_train, y_train), (X_test, y_test) = mnist.load_data()
-    elif dataset_name == 'fashion_mnist':
-        from keras.datasets import fashion_mnist
-        (X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
-    else:
-        raise ValueError(f"Dataset {dataset_name} not recognized")
-    (X_train, X_val, y_train, y_val) = _create_validation_set(X_train, y_train, val_ratio=0.1, seed=42)
-
-    X_train_flat = X_train.reshape(X_train.shape[0], -1) / 255.0
-    X_val_flat = X_val.reshape(X_val.shape[0], -1) / 255.0
-    X_test_flat = X_test.reshape(X_test.shape[0], -1) / 255.0
-    
-    return X_train_flat, y_train, X_val_flat, y_val, X_test_flat, y_test
-
 def plot_loss_comparison(ce_histories, ce_models, mse_histories, mse_models, epochs, num_runs=5):
-    
+    """
+    Description: Plots comparison of cross entropy vs MSE loss functions
+    Input format:
+      - ce_histories: list (list of dictionaries with training history for cross entropy)
+      - ce_models: list (list of trained models using cross entropy)
+      - mse_histories: list (list of dictionaries with training history for MSE)
+      - mse_models: list (list of trained models using MSE)
+      - epochs: int (number of epochs)
+      - num_runs: int (number of runs averaged, default=5)
+    Output format:
+      - results: dict (dictionary containing models and metrics)
+    """
     from matplotlib.gridspec import GridSpec
     sns.set_theme(style="whitegrid")
     plt.rcParams['font.family'] = 'sans-serif'
@@ -292,8 +359,17 @@ def plot_loss_comparison(ce_histories, ce_models, mse_histories, mse_models, epo
     plt.rcParams['xtick.color'] = '#333333'
     plt.rcParams['ytick.color'] = '#333333'
     
-    
     def average_metrics(histories):
+        """
+        Description: Computes average metrics from multiple training histories
+        Input format:
+          - histories: list (list of dictionaries with 'train_loss', 'train_acc', 'val_loss', 'val_acc')
+        Output format:
+          - train_loss: numpy.ndarray (average training loss)
+          - train_acc: numpy.ndarray (average training accuracy)
+          - val_loss: numpy.ndarray (average validation loss)
+          - val_acc: numpy.ndarray (average validation accuracy)
+        """
         train_loss = np.mean([h['train_loss'] for h in histories], axis=0)
         train_acc = np.mean([h['train_acc'] for h in histories], axis=0)
         val_loss = np.mean([h['val_loss'] for h in histories], axis=0)
@@ -355,9 +431,6 @@ def plot_loss_comparison(ce_histories, ce_models, mse_histories, mse_models, epo
     ax4.text(0.02, 0.95, textstr, transform=ax4.transAxes, fontsize=12,
             verticalalignment='top', bbox=props)
     
-    # plt.figtext(0.5, 0.01, f"Loss Function Analysis (Averaged over {num_runs} runs)", 
-    #             ha="center", fontsize=14, fontstyle='italic')
-    
     plt.tight_layout()
     plt.savefig('./plots/early_convergence_comparison_avg.png', dpi=300, bbox_inches='tight')
     plt.show()
@@ -389,7 +462,11 @@ def plot_loss_comparison(ce_histories, ce_models, mse_histories, mse_models, epo
 
 def __analyze_results(results):
     """
-    Analyze and print the final performance metrics with enhanced visuals
+    Description: Analyzes and visualizes performance comparison between cross entropy and MSE
+    Input format:
+      - results: dict (dictionary containing metrics from plot_loss_comparison)
+    Output format:
+      - dict: dictionary with analysis metrics (convergence, overfit, final accuracy)
     """
     ce_metrics = results['metrics']['ce']
     mse_metrics = results['metrics']['mse']
@@ -500,3 +577,9 @@ def __analyze_results(results):
         'ce_final_acc': ce_final_acc,
         'mse_final_acc': mse_final_acc
     }
+    
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
