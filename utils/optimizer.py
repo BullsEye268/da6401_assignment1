@@ -10,6 +10,15 @@ class Optimizer:
         B (list): List of bias vectors
         **kwargs: Optimizer-specific parameters
         """
+        """Initialize the base Optimizer class
+        
+        Input format:
+        - W: list of numpy.ndarray (weight matrices for each layer)
+        - B: list of numpy.ndarray (bias vectors for each layer)
+        - LOG_EACH: bool (whether to log each iteration, default=False)
+        - **kwargs: dict (additional optimizer-specific parameters)
+        
+        Output format: None (sets up optimizer instance)"""
         self.L = len(W)  # Number of layers
         self.LOG_EACH = LOG_EACH
         self.params = kwargs
@@ -28,15 +37,46 @@ class Optimizer:
         Returns:
         tuple: (new_W, new_B) updated weights and biases
         """
+        """Update weights and biases (abstract method)
+        
+        Input format:
+        - W: list of numpy.ndarray (current weights)
+        - B: list of numpy.ndarray (current biases)
+        - dW: list of numpy.ndarray (weight gradients)
+        - dB: list of numpy.ndarray (bias gradients)
+        - iteration: int (current training iteration)
+        
+        Output format:
+        - tuple: (list of numpy.ndarray, list of numpy.ndarray) (updated weights and biases)"""
         raise NotImplementedError("Each optimizer must implement this method")
 
 
 class SGDOptimizer(Optimizer):
     def __init__(self, W, B, learning_rate=0.01, **kwargs):
+        """Initialize SGD optimizer
+        
+        Input format:
+        - W: list of numpy.ndarray (weight matrices)
+        - B: list of numpy.ndarray (bias vectors)
+        - learning_rate: float (learning rate, default=0.01)
+        - **kwargs: dict (additional parameters passed to base class)
+        
+        Output format: None (sets up SGD optimizer)"""
         super().__init__(W, B, **kwargs)
         self.learning_rate = learning_rate
     
     def update(self, W, B, dW, dB, iteration):
+        """Update weights and biases using SGD
+        
+        Input format:
+        - W: list of numpy.ndarray (current weights)
+        - B: list of numpy.ndarray (current biases)
+        - dW: list of numpy.ndarray (weight gradients)
+        - dB: list of numpy.ndarray (bias gradients)
+        - iteration: int (current training iteration)
+        
+        Output format:
+        - tuple: (list of numpy.ndarray, list of numpy.ndarray) (updated weights and biases)"""
         if self.LOG_EACH and iteration==0:
             print(f'Running SGDOptimizer {self.learning_rate = }')
         for i in range(self.L):
@@ -47,6 +87,16 @@ class SGDOptimizer(Optimizer):
 
 class MomentumOptimizer(Optimizer):
     def __init__(self, W, B, learning_rate=0.01, momentum=0.9, **kwargs):
+        """Initialize Momentum optimizer
+        
+        Input format:
+        - W: list of numpy.ndarray (weight matrices)
+        - B: list of numpy.ndarray (bias vectors)
+        - learning_rate: float (learning rate, default=0.01)
+        - momentum: float (momentum parameter, default=0.9)
+        - **kwargs: dict (additional parameters passed to base class)
+        
+        Output format: None (sets up Momentum optimizer with velocity vectors)"""
         super().__init__(W, B, **kwargs)
         self.learning_rate = learning_rate
         self.momentum = momentum
@@ -56,6 +106,17 @@ class MomentumOptimizer(Optimizer):
         self.v_B = [np.zeros_like(B[i]) for i in range(self.L)]
     
     def update(self, W, B, dW, dB, iteration):
+        """Update weights and biases using Momentum
+        
+        Input format:
+        - W: list of numpy.ndarray (current weights)
+        - B: list of numpy.ndarray (current biases)
+        - dW: list of numpy.ndarray (weight gradients)
+        - dB: list of numpy.ndarray (bias gradients)
+        - iteration: int (current training iteration)
+        
+        Output format:
+        - tuple: (list of numpy.ndarray, list of numpy.ndarray) (updated weights and biases)"""
         if self.LOG_EACH and iteration==0:
             print(f'Running MomentumOptimizer {self.learning_rate = } {self.momentum = }')
         for i in range(self.L):
@@ -72,6 +133,16 @@ class MomentumOptimizer(Optimizer):
 
 class NesterovOptimizer(Optimizer):
     def __init__(self, W, B, learning_rate=0.01, momentum=0.9, **kwargs):
+        """Initialize Nesterov Accelerated Gradient optimizer
+        
+        Input format:
+        - W: list of numpy.ndarray (weight matrices)
+        - B: list of numpy.ndarray (bias vectors)
+        - learning_rate: float (learning rate, default=0.01)
+        - momentum: float (momentum parameter, default=0.9)
+        - **kwargs: dict (additional parameters passed to base class)
+        
+        Output format: None (sets up Nesterov optimizer with velocity vectors)"""
         super().__init__(W, B, **kwargs)
         self.learning_rate = learning_rate
         self.momentum = momentum
@@ -81,6 +152,17 @@ class NesterovOptimizer(Optimizer):
         self.v_B = [np.zeros_like(B[i]) for i in range(self.L)]
     
     def update(self, W, B, dW, dB, iteration):
+        """Update weights and biases using Nesterov momentum
+        
+        Input format:
+        - W: list of numpy.ndarray (current weights)
+        - B: list of numpy.ndarray (current biases)
+        - dW: list of numpy.ndarray (weight gradients)
+        - dB: list of numpy.ndarray (bias gradients)
+        - iteration: int (current training iteration)
+        
+        Output format:
+        - tuple: (list of numpy.ndarray, list of numpy.ndarray) (updated weights and biases)"""
         if self.LOG_EACH and iteration==0:
             print(f'Running NesterovOptimizer {self.learning_rate = } {self.momentum = }')
         W_lookahead = [None] * self.L
@@ -105,6 +187,17 @@ class NesterovOptimizer(Optimizer):
 
 class RMSpropOptimizer(Optimizer):
     def __init__(self, W, B, learning_rate=0.001, decay_rate=0.9, epsilon=1e-8, **kwargs):
+        """Initialize RMSprop optimizer
+        
+        Input format:
+        - W: list of numpy.ndarray (weight matrices)
+        - B: list of numpy.ndarray (bias vectors)
+        - learning_rate: float (learning rate, default=0.001)
+        - decay_rate: float (decay rate for moving average, default=0.9)
+        - epsilon: float (small value for numerical stability, default=1e-8)
+        - **kwargs: dict (additional parameters passed to base class)
+        
+        Output format: None (sets up RMSprop optimizer with cache vectors)"""
         super().__init__(W, B, **kwargs)
         self.learning_rate = learning_rate
         self.decay_rate = decay_rate
@@ -115,6 +208,17 @@ class RMSpropOptimizer(Optimizer):
         self.cache_B = [np.zeros_like(B[i]) for i in range(self.L)]
     
     def update(self, W, B, dW, dB, iteration):
+        """Update weights and biases using RMSprop
+        
+        Input format:
+        - W: list of numpy.ndarray (current weights)
+        - B: list of numpy.ndarray (current biases)
+        - dW: list of numpy.ndarray (weight gradients)
+        - dB: list of numpy.ndarray (bias gradients)
+        - iteration: int (current training iteration)
+        
+        Output format:
+        - tuple: (list of numpy.ndarray, list of numpy.ndarray) (updated weights and biases)"""
         if self.LOG_EACH and iteration==0:
             print(f'Running RMSpropOptimizer {self.learning_rate = } {self.decay_rate = } {self.epsilon = }')
         for i in range(self.L):
@@ -131,6 +235,18 @@ class RMSpropOptimizer(Optimizer):
 
 class AdamOptimizer(Optimizer):
     def __init__(self, W, B, learning_rate=0.001, beta1=0.9, beta2=0.999, epsilon=1e-8, **kwargs):
+        """Initialize Adam optimizer
+        
+        Input format:
+        - W: list of numpy.ndarray (weight matrices)
+        - B: list of numpy.ndarray (bias vectors)
+        - learning_rate: float (learning rate, default=0.001)
+        - beta1: float (exponential decay rate for first moment, default=0.9)
+        - beta2: float (exponential decay rate for second moment, default=0.999)
+        - epsilon: float (small value for numerical stability, default=1e-8)
+        - **kwargs: dict (additional parameters passed to base class)
+        
+        Output format: None (sets up Adam optimizer with moment vectors)"""
         super().__init__(W, B, **kwargs)
         self.learning_rate = learning_rate
         self.beta1 = beta1
@@ -146,6 +262,17 @@ class AdamOptimizer(Optimizer):
         self.v_B = [np.zeros_like(B[i]) for i in range(self.L)]
     
     def update(self, W, B, dW, dB, iteration):
+        """Update weights and biases using Adam
+        
+        Input format:
+        - W: list of numpy.ndarray (current weights)
+        - B: list of numpy.ndarray (current biases)
+        - dW: list of numpy.ndarray (weight gradients)
+        - dB: list of numpy.ndarray (bias gradients)
+        - iteration: int (current training iteration)
+        
+        Output format:
+        - tuple: (list of numpy.ndarray, list of numpy.ndarray) (updated weights and biases)"""
         if self.LOG_EACH and iteration==0:
             print(f'Running AdamOptimizer {self.learning_rate = } {self.beta1 = } {self.beta2 = } {self.epsilon = }')
         t = iteration + 1  # Timestep starts at 1
@@ -174,6 +301,18 @@ class AdamOptimizer(Optimizer):
 
 class NadamOptimizer(Optimizer):
     def __init__(self, W, B, learning_rate=0.001, beta1=0.9, beta2=0.999, epsilon=1e-8, **kwargs):
+        """Initialize Nadam optimizer
+        
+        Input format:
+        - W: list of numpy.ndarray (weight matrices)
+        - B: list of numpy.ndarray (bias vectors)
+        - learning_rate: float (learning rate, default=0.001)
+        - beta1: float (exponential decay rate for first moment, default=0.9)
+        - beta2: float (exponential decay rate for second moment, default=0.999)
+        - epsilon: float (small value for numerical stability, default=1e-8)
+        - **kwargs: dict (additional parameters passed to base class)
+        
+        Output format: None (sets up Nadam optimizer with moment vectors)"""
         super().__init__(W, B, **kwargs)
         self.learning_rate = learning_rate
         self.beta1 = beta1
@@ -189,6 +328,17 @@ class NadamOptimizer(Optimizer):
         self.v_B = [np.zeros_like(B[i]) for i in range(self.L)]
     
     def update(self, W, B, dW, dB, iteration):
+        """Update weights and biases using Nadam
+        
+        Input format:
+        - W: list of numpy.ndarray (current weights)
+        - B: list of numpy.ndarray (current biases)
+        - dW: list of numpy.ndarray (weight gradients)
+        - dB: list of numpy.ndarray (bias gradients)
+        - iteration: int (current training iteration)
+        
+        Output format:
+        - tuple: (list of numpy.ndarray, list of numpy.ndarray) (updated weights and biases)"""
         if self.LOG_EACH and iteration==0:
             print(f'Running NadamOptimizer {self.learning_rate = } {self.beta1 = } {self.beta2 = } {self.epsilon = }')
         t = iteration + 1  # Timestep starts at 1
@@ -219,7 +369,39 @@ class NadamOptimizer(Optimizer):
         return W, B
     
 
-# A new optimizer can be added by following these steps:
-# 1. Create a new class that inherits from the Optimizer class
-# 2. Implement the update method to update the parameters
-# 3. Add the new optimizer to the optimizer_map dictionary in `utils.neural_network.set_optimiser`
+"""Steps to add a new optimizer class:
+1. Create a new class inheriting from Optimizer:
+   class NewOptimizer(Optimizer):
+   
+2. Define the __init__ method with required parameters:
+   def __init__(self, W, B, learning_rate=0.01, custom_param=0.5, **kwargs):
+       super().__init__(W, B, **kwargs)
+       self.learning_rate = learning_rate
+       self.custom_param = custom_param
+       # Initialize any additional state variables (e.g., momentum, cache)
+       self.state_var = [np.zeros_like(W[i]) for i in range(self.L)]
+
+3. Implement the update method:
+   def update(self, W, B, dW, dB, iteration):
+       # Optional logging
+       if self.LOG_EACH and iteration == 0:
+           print(f'Running NewOptimizer {self.learning_rate = } {self.custom_param = }')
+       for i in range(self.L):
+           # Implement update rule using self.learning_rate, self.custom_param
+           # Update state variables if needed
+           # Update W[i] and B[i]
+       return W, B
+
+4. Update the optimizer_map in NeuralNetwork.set_optimizer (in the neural_network.py file):
+   optimizer_map = {
+       ...existing optimizers...,
+       'new_optimizer': NewOptimizer
+   }
+
+5. Update get_optimizer function in helper_functions.py (if used) to return the new optimizer:
+   elif name == 'new_optimizer':
+       return {'name': 'new_optimizer', 'learning_rate': learning_rate, 'custom_param': custom_param}
+
+6. Import the new optimizer class in neural_network.py:
+   from .optimizer import ...existing imports..., NewOptimizer
+"""

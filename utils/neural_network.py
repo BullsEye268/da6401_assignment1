@@ -10,6 +10,16 @@ class NeuralNetwork:
     def __init__(self, layer_sizes=[784, 17, 19, 10], 
                  activation_functions=['sigmoid', 'sigmoid', 'softmax'], 
                  weight_decay=0.0, weight_init='random', LOG_EACH=False):
+        """Initialize a NeuralNetwork with specified architecture and parameters
+        
+        Input format:
+        - layer_sizes: list of int (sizes of each layer, default=[784, 17, 19, 10])
+        - activation_functions: list of str (activation functions for each layer, default=['sigmoid', 'sigmoid', 'softmax'])
+        - weight_decay: float (L2 regularization parameter, default=0.0)
+        - weight_init: str (weight initialization method: 'random' or 'xavier', default='random')
+        - LOG_EACH: bool (whether to log each iteration, default=False)
+        
+        Output format: None (creates instance with initialized weights and biases)"""
         assert len(layer_sizes) == len(activation_functions) + 1, "Number of layers (excluding input layer) and activations must match"
         self.layer_sizes = layer_sizes
         self.L = len(layer_sizes) - 1
@@ -33,6 +43,12 @@ class NeuralNetwork:
         self.optimizer = None
     
     def set_optimizer(self, optimizer_dict):
+        """Set the optimizer for the neural network
+        
+        Input format:
+        - optimizer_dict: dict (dictionary containing optimizer name and parameters)
+        
+        Output format: None (sets self.optimizer to chosen optimizer instance)"""
         optimizer_map = {
             'sgd': SGDOptimizer,
             'momentum': MomentumOptimizer,
@@ -50,6 +66,14 @@ class NeuralNetwork:
         self.optimizer = optimizer_map[optimizer_dict['name'].lower()](self.W, self.B, **optimizer_dict)
     
     def activate(self, A, activation):
+        """Apply specified activation function to input
+        
+        Input format:
+        - A: numpy.ndarray (pre-activation values)
+        - activation: str (activation function name: 'sigmoid', 'relu', 'tanh', 'softmax', 'identity')
+        
+        Output format:
+        - numpy.ndarray (activated values)"""
         if activation.lower() == 'sigmoid':
             return 1 / (1 + np.exp(-A))
         elif activation.lower() == 'relu':
@@ -66,7 +90,15 @@ class NeuralNetwork:
             raise ValueError(f"Unsupported activation function: {activation}")
     
     def _activate_derivative(self, A, H, activation):
-        """Calculate derivative of activation function"""
+        """Calculate derivative of activation function
+        
+        Input format:
+        - A: numpy.ndarray (pre-activation values)
+        - H: numpy.ndarray (post-activation values)
+        - activation: str (activation function name)
+        
+        Output format:
+        - numpy.ndarray (derivative values)"""
         if activation.lower() == 'sigmoid':
             return H * (1 - H)
         elif activation.lower() == 'relu':
@@ -82,6 +114,14 @@ class NeuralNetwork:
 
     
     def forward_propagation(self, X):
+        """Perform forward propagation through the network
+        
+        Input format:
+        - X: numpy.ndarray (input data, shape (n_samples, n_features))
+        
+        Output format:
+        - H: list of numpy.ndarray (activations at each layer)
+        - A: list of numpy.ndarray (pre-activations at each layer)"""
         H = [X]
         A = []
         
@@ -92,6 +132,15 @@ class NeuralNetwork:
         return H, A
     
     def compute_loss(self, H_final, y, loss_type='cross_entropy'):
+        """Compute loss between predictions and true labels
+        
+        Input format:
+        - H_final: numpy.ndarray (network predictions)
+        - y: numpy.ndarray (true labels, shape (n_samples,) or one-hot)
+        - loss_type: str (loss function type: 'cross_entropy' or 'mse', default='cross_entropy')
+        
+        Output format:
+        - float (computed loss value)"""
         if y.ndim == 1:
             y = self.one_hot(y)
         m = y.shape[0]  # Number of examples
@@ -108,6 +157,15 @@ class NeuralNetwork:
         return loss
     
     def _loss_derivative(self, y_pred, y, loss_type):
+        """Compute derivative of loss function
+        
+        Input format:
+        - y_pred: numpy.ndarray (predicted values)
+        - y: numpy.ndarray (true labels)
+        - loss_type: str (loss function type)
+        
+        Output format:
+        - numpy.ndarray (loss derivative)"""
         if loss_type.lower() == 'cross_entropy':
             epsilon = 1e-15
             return -y / (y_pred + epsilon)
@@ -120,6 +178,18 @@ class NeuralNetwork:
             raise ValueError(f"Unsupported loss function: {loss_type}")
     
     def back_propagation(self, X, y, H, A, loss_type='cross_entropy'):
+        """Perform backpropagation to compute gradients
+        
+        Input format:
+        - X: numpy.ndarray (input data)
+        - y: numpy.ndarray (true labels)
+        - H: list of numpy.ndarray (activations from forward prop)
+        - A: list of numpy.ndarray (pre-activations from forward prop)
+        - loss_type: str (loss function type, default='cross_entropy')
+        
+        Output format:
+        - dW: list of numpy.ndarray (weight gradients)
+        - dB: list of numpy.ndarray (bias gradients)"""
         assert len(H) == self.L + 1 and len(A) == self.L
         N = X.shape[0]
         assert N==y.size and self.L==len(A) and self.L + 1==len(H)
@@ -152,11 +222,24 @@ class NeuralNetwork:
         return dW, dB
     
     def one_hot(self, y):
+        """Convert labels to one-hot encoding
+        
+        Input format:
+        - y: numpy.ndarray (integer labels, shape (n_samples,))
+        
+        Output format:
+        - numpy.ndarray (one-hot encoded labels, shape (n_samples, n_classes))"""
         one_hot_y = np.zeros((y.size, self.layer_sizes[-1]))
         one_hot_y[np.arange(y.size), y] = 1
         return one_hot_y
     
     def plot_history(self, history):
+        """Plot training history
+        
+        Input format:
+        - history: dict (dictionary with 'train_loss' and optionally 'val_loss')
+        
+        Output format: None (displays plot)"""
         plt.figure(figsize=(12, 6))
         plt.plot(history['train_loss'], label='Training Loss')
         if 'val_loss' in history:
@@ -167,21 +250,59 @@ class NeuralNetwork:
         plt.show()
     
     def predict(self, X):
+        """Make predictions for input data
+        
+        Input format:
+        - X: numpy.ndarray (input data, shape (n_samples, n_features))
+        
+        Output format:
+        - numpy.ndarray (predictions, shape (n_samples, n_classes))"""
         H, _ = self.forward_propagation(X)
         return H[-1]
     
     def compute_accuracy_from_predictions(self, y_pred, y):
+        """Compute accuracy from predictions
+        
+        Input format:
+        - y_pred: numpy.ndarray (predicted probabilities or labels)
+        - y: numpy.ndarray (true labels)
+        
+        Output format:
+        - float (accuracy value between 0 and 1)"""
         if y_pred.ndim != 1:
             y_pred = np.argmax(y_pred, axis=1)
         return np.mean(y_pred == y)
     
     def compute_accuracy(self, X, y):
+        """Compute accuracy for input data and labels
+        
+        Input format:
+        - X: numpy.ndarray (input data)
+        - y: numpy.ndarray (true labels)
+        
+        Output format:
+        - float (accuracy value between 0 and 1)"""
         y_pred = np.argmax(self.predict(X), axis=1)
         return np.mean(y_pred == y)
     
     def train(self, X_train, y_train, X_val=None, y_val=None, 
               batch_size=64, num_epochs=10, loss_type='cross_entropy', 
               log_every=100, callback=None):
+        """Train the neural network
+        
+        Input format:
+        - X_train: numpy.ndarray (training data)
+        - y_train: numpy.ndarray (training labels)
+        - X_val: numpy.ndarray or None (validation data, default=None)
+        - y_val: numpy.ndarray or None (validation labels, default=None)
+        - batch_size: int (batch size, default=64)
+        - num_epochs: int (number of epochs, default=10)
+        - loss_type: str (loss function type, default='cross_entropy')
+        - log_every: int (logging frequency, default=100)
+        - callback: callable or None (callback function, default=None)
+        
+        Output format:
+        - history: dict (training history with losses and accuracies)"""
         if self.optimizer is None:
             self.set_optimizer({'name':'sgd', 'learning_rate':0.01})
         
@@ -248,6 +369,19 @@ class NeuralNetwork:
     
 
 def nn_from_config(config, wandb_callback, X_train, y_train, X_val, y_val):
+    """Create and train a neural network from a configuration
+    
+    Input format:
+    - config: object (configuration object with network parameters)
+    - wandb_callback: callable (Weights & Biases callback function)
+    - X_train: numpy.ndarray (training data)
+    - y_train: numpy.ndarray (training labels)
+    - X_val: numpy.ndarray (validation data)
+    - y_val: numpy.ndarray (validation labels)
+    
+    Output format:
+    - nn: NeuralNetwork (trained neural network instance)
+    - history: dict (training history)"""
     layer_sizes = [784] + [config.hidden_size]*config.num_layers + [10]
     activation_functions = [config.activation]*config.num_layers + ['softmax']
     

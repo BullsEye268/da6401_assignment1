@@ -10,7 +10,7 @@ This project implements a feedforward neural network from scratch using NumPy to
 
 - **Flexible Neural Network:** Implementation of a feedforward neural network with customizable number of hidden layers and neurons.
 - **Backpropagation:** Implemented backpropagation algorithm with support for multiple optimization functions.
-- **Optimization Algorithms:** Includes SGD, Momentum, Nesterov Accelerated Gradient, RMSprop, Adam, and Nadam optimizers. Adding other optimizers has been simplified to dictating `__init__()` and `train()` functions in a separate class, in `optimizers.py`.
+- **Optimization Algorithms:** Includes SGD, Momentum, Nesterov Accelerated Gradient, RMSprop, Adam, and Nadam optimizers. Adding other optimizers has been simplified to dictating `__init__()` and `update()` functions in `class NewOptimizer(Optimizer):`, in `optimizer.py`. Steps on this have been included at the bottom of `optimizer.py`.
 - **Hyperparameter Tuning:** Uses Wandb sweeps to efficiently search for optimal hyperparameters.
 - **Experiment Tracking:** Leverages Wandb for detailed experiment tracking, visualization, and analysis.
 - **[Wandb Report:](https://api.wandb.ai/links/bullseye2608-indian-institute-of-technology-madras/rj51csft)** Contains detailed logs, visualizations, and analysis of the experiments, including hyperparameter tuning results and performance metrics, as well as question-wise responses to the assignment.
@@ -88,9 +88,9 @@ This project implements a feedforward neural network from scratch using NumPy to
 
 - `utils/`: Contains helper functions, neural network implementation, optimizers, and Wandb utilities.
 - `final.ipynb`: Jupyter Notebook containing the final implementation and results.
-- `train.py`: Python script for training the neural network.
 - `README.md`: Project documentation.
 - `sweep_config.yml`: Configuration file for Wandb sweeps.
+- `train.py`: Python script for training the neural network.
 - `trials.ipynb`: Jupyter notebook used for initial experimentation and debugging.
 
 ## Author
