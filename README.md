@@ -89,37 +89,9 @@ This project implements a feedforward neural network from scratch using NumPy to
 - `utils/`: Contains helper functions, neural network implementation, optimizers, and Wandb utilities.
 - `final.ipynb`: Jupyter Notebook containing the final implementation and results.
 - `train.py`: Python script for training the neural network.
-- `readme.md`: Project documentation.
+- `README.md`: Project documentation.
 - `sweep_config.yml`: Configuration file for Wandb sweeps.
 - `trials.ipynb`: Jupyter notebook used for initial experimentation and debugging.
-
-<!-- ## Questions and Answers
-
-### Question 1: Sample Image Plotting
-
-- The `wandb_helper.py` file contains the `log_images` function, that can be used to plot a sample of each class from the Fashion-MNIST dataset using Wandb.
-
-### Question 2: Network Implementation
-
-- The `neural_network.py` file implements a flexible neural network with customizable layer sizes and activation functions.
-
-### Question 3: Backpropagation and Optimization
-
-- The `neural_network.py` file implements the backpropagation algorithm, and `optimizer.py` contains the implementation of SGD, Momentum, Nesterov, RMSprop, Adam, and Nadam optimizers.
-
-### Question 4: Hyperparameter Tuning with Wandb
-
-- Wandb sweeps were used to find the best hyperparameters. The `sweep_config.yml` file defines the search space, and the `train.py` script integrates with Wandb to run the sweeps.
-
-### Question 5: Best Validation Accuracy
-
-- The Wandb report displays the best validation accuracy achieved during the hyperparameter search.
-
-### Question 6: Observations and Inferences
-
-- The Wandb report includes parallel coordinates plots and correlation summaries to analyze the impact of different hyperparameters on model performance.
-- Observations on which configurations worked and which did not are documented in the Wandb report.
-- Recommendations for optimal configurations to achieve high accuracy are provided based on the experimental results. -->
 
 ## Author
 
