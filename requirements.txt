@@ -1,0 +1,7 @@
+numpy==1.23.5
+pandas
+matplotlib
+seaborn
+plotly==5.24.1
+keras==3.8.0
+wandb==0.19.7
