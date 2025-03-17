@@ -4,6 +4,9 @@
 
 ## Description
 
+[GitHub Repository Link](https://github.com/BullsEye268/da6401_assignment1.git)
+[Wandb Report Link](https://api.wandb.ai/links/bullseye2608-indian-institute-of-technology-madras/rj51csft)
+
 This project implements a feedforward neural network from scratch using NumPy to classify images from the Fashion-MNIST dataset. It includes backpropagation with various optimization algorithms and utilizes Weights & Biases [(Wandb)](https://api.wandb.ai/links/bullseye2608-indian-institute-of-technology-madras/rj51csft) for experiment tracking and hyperparameter tuning.
 
 ## Features
