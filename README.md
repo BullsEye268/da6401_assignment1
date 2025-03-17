@@ -25,12 +25,12 @@ This project implements a feedforward neural network from scratch using NumPy to
     git clone https://github.com/BullsEye268/da6401_assignment1.git
     cd da6401_assignment1
     ```
-2.  **Install dependencies:**
+2.  **Install dependencies from `requirements.txt`:**
     ```bash
-    pip install numpy pandas matplotlib seaborn plotly keras wandb
+    pip install -r requirements.txt
     ```
 3.  **Set up Wandb:**
-    - Create a Wandb account and log in using `wandb login`.
+    - Create a Wandb account and log in using bash `wandb login`
     - Or, use the python functionality `wandb.login()`
 
 ## Usage
@@ -38,8 +38,8 @@ This project implements a feedforward neural network from scratch using NumPy to
 1.  **Run the training script:**
     - To train the neural network with default or specified parameters, run the `train.py` script.
     - To run the hyperparameter sweep, use the `sweep_config.yml` configuration file with Wandb.
-2.  **Run the final ipynb file:**
-    - `final.ipynb` contains the final execution of the code, with cells segregated by question numbers from the assignment.
+2.  **Run the main ipynb file:**
+    - `main.ipynb` contains the final execution of the code, with cells segregated by question numbers from the assignment.
 3.  **Use Wandb:**
     - View experiment results, visualizations, and hyperparameter tuning insights on the Wandb dashboard.
     - Use the link of the [report generated on wandb.ai](https://api.wandb.ai/links/bullseye2608-indian-institute-of-technology-madras/rj51csft) to check the results.
@@ -58,10 +58,11 @@ This project implements a feedforward neural network from scratch using NumPy to
 ## Code Specifications
 
 - `train.py`: Accepts command-line arguments to configure and run the training process.
-- `neural_network.py`: Implements the `NeuralNetwork` class with forward and backward propagation, loss computation, and training methods.
-- `optimizer.py`: Contains implementations of various optimization algorithms (SGD, Momentum, Nesterov, RMSprop, Adam, Nadam).
-- `helper_functions.py`: Includes utility functions for data loading, confusion matrix plotting, and other helper tasks.
-- `wandb_helper.py`: Manages Wandb integration for experiment tracking and logging.
+- `utils/`: Contains custom built modules:
+  - `neural_network.py`: Implements the `NeuralNetwork` class with forward and backward propagation, loss computation, and training methods.
+  - `optimizer.py`: Contains implementations of various optimization algorithms (SGD, Momentum, Nesterov, RMSprop, Adam, Nadam).
+  - `helper_functions.py`: Includes utility functions for data loading, confusion matrix plotting, and other helper tasks.
+  - `wandb_helper.py`: Manages Wandb integration for experiment tracking and logging.
 
 ### `train.py` Command-Line Arguments
 
