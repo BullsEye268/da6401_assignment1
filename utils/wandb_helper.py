@@ -125,3 +125,17 @@ def log_images(X, y, entity, project):
     })
 
     wandb.finish()
+
+def log_plots(plots_to_be_added, entity, project):
+    run = wandb.init(entity=entity, 
+                     project=project, 
+                     name="Plots_"+datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                     tags=['Plot Upload'])
+    
+    for title, path_to_plot in plots_to_be_added:
+        wandb.log({title: wandb.Image(path_to_plot)})
+    
+    wandb.finish()
+    clear_output(wait=True)
+    return True
+    

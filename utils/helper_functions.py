@@ -307,7 +307,7 @@ def plot_confusion_matrix(y_true, y_pred, run_id):
     
     return cm_filename, cm, precision, recall, f1
 
-def create_plotly_confusion_matrix(cm, class_names, num_runs):
+def create_plotly_confusion_matrix(cm, class_names, num_runs, accuracy):
     """
     Description: Creates an interactive Plotly confusion matrix
     
@@ -333,13 +333,11 @@ def create_plotly_confusion_matrix(cm, class_names, num_runs):
         hovertemplate="True: %{y}<br>Predicted: %{x}<br>Count: %{text}<br>Rate: %{z:.2f}<extra></extra>",
     ))
     
-    # Calculate accuracy
-    accuracy = np.sum(np.diag(cm)) / np.sum(cm)
     
     # Add title and labels
     fig.update_layout(
         title={
-            'text': f'Confusion Matrix - Avg. of {num_runs}<br><sup>Accuracy: {accuracy:.4f}</sup>',
+            'text': f'Confusion Matrix - Avg. of {num_runs} Runs<br><sup>Accuracy: {accuracy:.4f}</sup>',
             'y': 0.9,
             'x': 0.5,
             'xanchor': 'center',

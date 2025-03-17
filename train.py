@@ -108,13 +108,23 @@ def parse_args():
 def main():
     args = parse_args()
 
-    wandb.init(
-        project=args.wandb_project,
-        entity=args.wandb_entity,
-        name=f'{helper_functions.run_name_generator(args)}',
-        tags=['individual_runs'],
-        config=vars(args)
-    )
+    if args.dataset == 'mnist':
+        wandb.init(
+            project=args.wandb_project,
+            entity=args.wandb_entity,
+            name=f'MNIST {helper_functions.run_name_generator(args)}',
+            tags=['individual_runs', 'MNIST'],
+            config=vars(args)
+        )
+    else:
+        wandb.init(
+            project=args.wandb_project,
+            entity=args.wandb_entity,
+            name=f'{helper_functions.run_name_generator(args)}',
+            tags=['individual_runs'],
+            config=vars(args)
+        )
+        
     
     X_train, y_train, X_val, y_val, X_test, y_test = helper_functions.load_data(dataset_name=args.dataset)
     

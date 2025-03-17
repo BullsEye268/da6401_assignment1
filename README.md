@@ -22,8 +22,8 @@ This project implements a feedforward neural network from scratch using NumPy to
 
 1.  **Clone the repository:**
     ```bash
-    git clone <repository_url>
-    cd <repository_directory>
+    git clone https://github.com/BullsEye268/da6401_assignment1.git
+    cd da6401_assignment1
     ```
 2.  **Install dependencies:**
     ```bash
